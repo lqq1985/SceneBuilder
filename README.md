@@ -1,4 +1,4 @@
-# SceneManager
+# Scene Builder
 A scene manager that will provide an interface for the user to add and manipulate models.    
 
 ## Dependencies
