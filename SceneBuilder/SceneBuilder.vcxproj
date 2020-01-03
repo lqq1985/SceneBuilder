@@ -191,24 +191,19 @@
     <ClCompile Include="SysOpenGLSetting.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\basic.frag" />
-    <None Include="shaders\basic.vert" />
-    <None Include="shaders\flat_terrain.frag" />
-    <None Include="shaders\flat_terrain.vert" />
     <None Include="shaders\light.frag" />
     <None Include="shaders\light.vert" />
-    <None Include="shaders\model_diffuse.frag" />
-    <None Include="shaders\model_diffuse.vert" />
+    <None Include="shaders\diffuse.frag" />
+    <None Include="shaders\diffuse.vert" />
     <None Include="shaders\model_diffuse_lighting.frag" />
     <None Include="shaders\model_diffuse_lighting.vert" />
-    <None Include="shaders\New File" />
     <None Include="shaders\normals.frag" />
     <None Include="shaders\normals.geo" />
     <None Include="shaders\normals.vert" />
     <None Include="shaders\skybox.frag" />
     <None Include="shaders\skybox.vert" />
-    <None Include="shaders\terrain.frag" />
-    <None Include="shaders\terrain.vert" />
+    <None Include="shaders\basic_lighting_no_texture.frag" />
+    <None Include="shaders\basic_lighting_no_texture.vert" />
     <None Include="shaders\terrain_diffuse.frag" />
     <None Include="shaders\terrain_diffuse.vert" />
     <None Include="shaders\text.frag" />

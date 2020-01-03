@@ -58,7 +58,7 @@ int main(int argc, char* args[]) {
 	Input input = Input();
 	CameraFreeLook camera = CameraFreeLook(SCREEN_WIDTH, SCREEN_HEIGHT);
 	Light light = Light();
-	Shader modelShader = Shader("shaders/model_diffuse_lighting.vert", "shaders/model_diffuse_lighting.frag");
+	Shader modelShader = Shader("shaders/basic_lighting_no_texture.vert", "shaders/basic_lighting_no_texture.frag");
 	Shader lightShader = Shader("shaders/light.vert", "shaders/light.frag");
 
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
@@ -69,7 +69,8 @@ int main(int argc, char* args[]) {
 	-----------*/
 	STModel stBox;
 	stBox.position = glm::vec3(0, 0, 0);
-	box.loadModel("assets/hospitalroom/hp194.obj");
+	//box.loadModel("assets/hospitalroom/hp194.obj");
+	box.loadModel("assets/test_map/test_map.obj");
 
 	light.load(glm::vec3(0, 16, 0));
 
@@ -109,7 +110,7 @@ int main(int argc, char* args[]) {
 		/*-----------
 		RENDER MODELS
 		-----------*/
-		box.draw(projection, view, modelShader, stBox, light.position);
+		box.draw(projection, view, modelShader, stBox, light.position, camera.getCameraPosition());
 		light.draw(projection, view, lightShader);
 
 		/*-----------

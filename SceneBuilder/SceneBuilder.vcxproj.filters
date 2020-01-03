@@ -157,37 +157,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\basic.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="shaders\basic.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="shaders\flat_terrain.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="shaders\flat_terrain.vert">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="shaders\light.frag">
       <Filter>Shaders</Filter>
     </None>
     <None Include="shaders\light.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="shaders\model_diffuse.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="shaders\model_diffuse.vert">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="shaders\model_diffuse_lighting.frag">
       <Filter>Shaders</Filter>
     </None>
     <None Include="shaders\model_diffuse_lighting.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="shaders\New File">
       <Filter>Shaders</Filter>
     </None>
     <None Include="shaders\normals.frag">
@@ -205,12 +184,6 @@
     <None Include="shaders\skybox.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="shaders\terrain.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="shaders\terrain.vert">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="shaders\terrain_diffuse.frag">
       <Filter>Shaders</Filter>
     </None>
@@ -221,6 +194,18 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="shaders\text.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\basic_lighting_no_texture.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\basic_lighting_no_texture.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\diffuse.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\diffuse.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

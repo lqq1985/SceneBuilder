@@ -23,7 +23,7 @@ void Model::loadModel(std::string filename)
     }
 }
 
-void Model::draw(glm::mat4& projection, glm::mat4& view, Shader& shader, STModel& structModel, glm::vec3 lightPos)
+void Model::draw(glm::mat4& projection, glm::mat4& view, Shader& shader, STModel& structModel, glm::vec3 lightPos, glm::vec3 viewPos)
 {
     shader.use();
 
@@ -35,6 +35,7 @@ void Model::draw(glm::mat4& projection, glm::mat4& view, Shader& shader, STModel
     shader.setMat4("view", view);
     shader.setMat4("model", model);
     shader.setVec3("lightPos", lightPos);
+    shader.setVec3("viewPos", viewPos);
 
 
     for (unsigned int i = 0; i < meshes.size(); i++) {
@@ -115,10 +116,13 @@ std::vector<Vertex> Model::vertices(aiMesh* mesh)
         vertex.position = vector3;
 
         // Normals
-        vector3.x = mesh->mNormals[i].x;
-        vector3.y = mesh->mNormals[i].y;
-        vector3.z = mesh->mNormals[i].z;
-        vertex.normal = vector3;
+        if (mesh->mNormals) {
+            vector3.x = mesh->mNormals[i].x;
+            vector3.y = mesh->mNormals[i].y;
+            vector3.z = mesh->mNormals[i].z;
+            vertex.normal = vector3;
+        }
+
 
         // Texture coordinates
         if (mesh->mTextureCoords[0]) {
@@ -132,17 +136,21 @@ std::vector<Vertex> Model::vertices(aiMesh* mesh)
             vertex.texCoord = glm::vec2(0, 0);
         }
 
-        // Tangent
-        vector3.x = mesh->mTangents[i].x;
-        vector3.y = mesh->mTangents[i].y;
-        vector3.z = mesh->mTangents[i].z;
-        vertex.tangent = vector3;
+        if (mesh->mTangents) {
+            vector3.x = mesh->mTangents[i].x;
+            vector3.y = mesh->mTangents[i].y;
+            vector3.z = mesh->mTangents[i].z;
+            vertex.tangent = vector3;
+        }
 
         // Bitangent
-        vector3.x = mesh->mBitangents[i].x;
-        vector3.y = mesh->mBitangents[i].y;
-        vector3.z = mesh->mBitangents[i].z;
-        vertex.bitangent = vector3;
+        if (mesh->mBitangents) {
+            vector3.x = mesh->mBitangents[i].x;
+            vector3.y = mesh->mBitangents[i].y;
+            vector3.z = mesh->mBitangents[i].z;
+            vertex.bitangent = vector3;
+        }
+
 
         vertices.push_back(vertex);
     }
