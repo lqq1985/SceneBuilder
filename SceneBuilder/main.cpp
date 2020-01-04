@@ -18,13 +18,23 @@
 #include "Shader.h"
 #include "Light.h"
 #include "STModel.h"
-#include "GUIMainPanel.h"
+#include "GUI.h"
+#include "STLight.h"
+#include "STMaterial.h"
 
 SDL_Window* window;
 SDL_GLContext context;
 unsigned int SCREEN_WIDTH = 1280;
 unsigned int SCREEN_HEIGHT = 720;
 bool quit = false;
+
+STLight lightProps;
+STMaterial materialProps;
+
+// shader uniforms
+float shininess = 32.0f;
+glm::vec3 materialSpecular(0.1f, 0.1f, 0.1f);
+glm::vec3 lightSpecular(0.5f, 0.5f, 0.5f);
 
 int main(int argc, char* args[]) {
 	/*-----------
@@ -66,11 +76,6 @@ int main(int argc, char* args[]) {
 	double dt = 1.0f / 60.0; 
 	bool wireframeToggle = false;
 
-	// shader uniforms
-	float shininess = 32.0f;
-	glm::vec3 materialSpecular(0.1f, 0.1f, 0.1f);
-	glm::vec3 lightSpecular(0.5f, 0.5f, 0.5f);
-
 	while (!quit) {
 		/*-----------
 		UPDATE
@@ -106,9 +111,9 @@ int main(int argc, char* args[]) {
 		-----------*/
 
 		modelShader.use();
-		modelShader.setFloat("shininess", shininess);
-		modelShader.setVec3("material_specular", materialSpecular);
-		modelShader.setVec3("light_specular", lightSpecular);
+		modelShader.setFloat("shininess", materialProps.shininess);
+		modelShader.setVec3("material_specular", materialProps.specular);
+		modelShader.setVec3("light_specular", lightProps.specular);
 
 		level.draw(projection, view, modelShader, stLevel, light.position, camera.getCameraPosition());
 		box.draw(projection, view, modelShader, stBox, light.position, camera.getCameraPosition());
@@ -119,11 +124,7 @@ int main(int argc, char* args[]) {
 		-----------*/
 
 		GUI::begin(window);
-		GUI::mainPanel(camera);
-		GUI::lightPanel(light);
-		GUI::shininess(shininess);
-		GUI::materialSpecular(materialSpecular);
-		GUI::lightSpecular(lightSpecular);
+		GUI::mainPanel(camera, light, lightProps, materialProps);
 		GUI::render();
 		 
 		/*-----------
@@ -136,9 +137,6 @@ int main(int argc, char* args[]) {
 		glViewport(0, 0, (int)SCREEN_WIDTH, (int)SCREEN_HEIGHT);
 	}
 
-	ImGui_ImplSDL2_Shutdown();
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui::DestroyContext();
-
+	GUI::shutdown();
 	return SystemOpenGLInit::shutDown(window, context);
 };

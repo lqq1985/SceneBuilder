@@ -27,9 +27,6 @@
     <ClInclude Include="CameraFreeLook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GUIMainPanel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -95,6 +92,15 @@
     </ClInclude>
     <ClInclude Include="imgui\imstb_truetype.h">
       <Filter>Vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="STLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="STMaterial.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

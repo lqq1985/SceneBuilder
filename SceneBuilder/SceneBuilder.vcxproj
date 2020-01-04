@@ -145,7 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CameraFreeLook.h" />
-    <ClInclude Include="GUIMainPanel.h" />
+    <ClInclude Include="GUI.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_opengl3.h" />
@@ -157,6 +157,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="LdrStbiWrapper.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="STMaterial.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="OGLGenTexture.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="STLight.h" />
     <ClInclude Include="STModel.h" />
     <ClInclude Include="STVertex.h" />
     <ClInclude Include="SysOpenGLInit.h" />
