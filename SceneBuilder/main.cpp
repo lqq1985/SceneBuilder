@@ -19,7 +19,6 @@
 #include "Light.h"
 #include "STModel.h"
 #include "GUIMainPanel.h"
-//#include "sqlite3/sqlite3.h"
 
 SDL_Window* window;
 SDL_GLContext context;
@@ -39,6 +38,7 @@ int main(int argc, char* args[]) {
 	--------------*/
 	GUI::init(window, context);
 
+	Model level = Model();
 	Model box = Model();
 	Input input = Input();
 	CameraFreeLook camera = CameraFreeLook(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -52,15 +52,24 @@ int main(int argc, char* args[]) {
 	/*-----------
 	LOAD MODELS
 	-----------*/
-	STModel stBox;
-	stBox.position = glm::vec3(0, 0, 0);
+	STModel stLevel;
+	stLevel.position = glm::vec3(0, 0, 0);
 	//box.loadModel("assets/hospitalroom/hp194.obj");
-	box.loadModel("assets/test_map/test_map.obj");
+	level.loadModel("assets/ground/ground.obj");
+
+	STModel stBox;
+	stBox.position = glm::vec3(0, 12, 0);
+	box.loadModel("assets/box/box.obj");
 
 	light.load(glm::vec3(0, 16, 0));
 
 	double dt = 1.0f / 60.0; 
 	bool wireframeToggle = false;
+
+	// shader uniforms
+	float shininess = 32.0f;
+	glm::vec3 materialSpecular(0.1f, 0.1f, 0.1f);
+	glm::vec3 lightSpecular(0.5f, 0.5f, 0.5f);
 
 	while (!quit) {
 		/*-----------
@@ -95,15 +104,26 @@ int main(int argc, char* args[]) {
 		/*-----------
 		RENDER MODELS
 		-----------*/
+
+		modelShader.use();
+		modelShader.setFloat("shininess", shininess);
+		modelShader.setVec3("material_specular", materialSpecular);
+		modelShader.setVec3("light_specular", lightSpecular);
+
+		level.draw(projection, view, modelShader, stLevel, light.position, camera.getCameraPosition());
 		box.draw(projection, view, modelShader, stBox, light.position, camera.getCameraPosition());
 		light.draw(projection, view, lightShader);
 
 		/*-----------
 		GUI RENDER
 		-----------*/
+
 		GUI::begin(window);
 		GUI::mainPanel(camera);
 		GUI::lightPanel(light);
+		GUI::shininess(shininess);
+		GUI::materialSpecular(materialSpecular);
+		GUI::lightSpecular(lightSpecular);
 		GUI::render();
 		 
 		/*-----------
