@@ -23,7 +23,7 @@ void Model::loadModel(std::string filename)
     }
 }
 
-void Model::draw(glm::mat4& projection, glm::mat4& view, Shader& shader, STModel& structModel, glm::vec3 lightPos, glm::vec3 viewPos)
+void Model::draw(glm::mat4& projection, glm::mat4& view, Shader& shader, STModel& structModel)
 {
     shader.use();
 
@@ -34,8 +34,6 @@ void Model::draw(glm::mat4& projection, glm::mat4& view, Shader& shader, STModel
     shader.setMat4("projection", projection);
     shader.setMat4("view", view);
     shader.setMat4("model", model);
-    shader.setVec3("lightPos", lightPos);
-    shader.setVec3("viewPos", viewPos);
 
 
     for (unsigned int i = 0; i < meshes.size(); i++) {

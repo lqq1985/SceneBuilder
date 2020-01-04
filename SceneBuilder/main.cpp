@@ -114,9 +114,11 @@ int main(int argc, char* args[]) {
 		modelShader.setFloat("shininess", materialProps.shininess);
 		modelShader.setVec3("material_specular", materialProps.specular);
 		modelShader.setVec3("light_specular", lightProps.specular);
+		modelShader.setVec3("lightPos", light.position);
+		modelShader.setVec3("viewPos", camera.getCameraPosition());
 
-		level.draw(projection, view, modelShader, stLevel, light.position, camera.getCameraPosition());
-		box.draw(projection, view, modelShader, stBox, light.position, camera.getCameraPosition());
+		level.draw(projection, view, modelShader, stLevel);
+		box.draw(projection, view, modelShader, stBox);
 		light.draw(projection, view, lightShader);
 
 		/*-----------
