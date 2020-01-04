@@ -4,7 +4,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "imgui/imgui.h"
 #include "Shader.h"
 #include <vector>
 #include "Sphere.h"
@@ -19,7 +18,6 @@ public:
 	void load(glm::vec3 position);
 	void draw(glm::mat4& projection, glm::mat4& view, Shader& shader);
 	glm::vec3 position = glm::vec3(0, 0, 0);
-	void gui();
 private:
 	unsigned int VAO;
 	unsigned int VBO;

@@ -34,26 +34,11 @@ int main(int argc, char* args[]) {
 	if (unsigned int e = SystemOpenGLInit::defaults(window, context, SCREEN_WIDTH, SCREEN_HEIGHT, 3, 3) > 0) return e;
 	SysOpenGLSetting::defaults(window, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-
-	/*---
-	IMGUI
-	----*/
-	bool err = glewInit() != GLEW_OK;
-	if (err) {
-		std::cout << "Error loading GLew for Imgui" << std::endl;
-	}
-
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
-	ImGui::StyleColorsDark();
-	ImGui_ImplSDL2_InitForOpenGL(window, context);
-	ImGui_ImplOpenGL3_Init("#version 330");
-
-
 	/*--------------
 	INITIALIZATIONS
 	--------------*/
+	GUI::init(window, context);
+
 	Model box = Model();
 	Input input = Input();
 	CameraFreeLook camera = CameraFreeLook(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -118,7 +103,7 @@ int main(int argc, char* args[]) {
 		-----------*/
 		GUI::begin(window);
 		GUI::mainPanel(camera);
-		light.gui();
+		GUI::lightPanel(light);
 		GUI::render();
 		 
 		/*-----------

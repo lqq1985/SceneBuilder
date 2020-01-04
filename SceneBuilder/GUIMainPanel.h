@@ -4,9 +4,19 @@
 #include <SDL2/SDL.h>
 #include "imgui/imgui.h"
 #include "CameraFreeLook.h"
+#include "Light.h"
 
 namespace GUI {
-	void begin(SDL_Window* window) {
+	void init(SDL_Window* &window, SDL_GLContext &context) {
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO();
+		ImGui::StyleColorsDark();
+		ImGui_ImplSDL2_InitForOpenGL(window, context);
+		ImGui_ImplOpenGL3_Init("#version 330");
+	}
+
+	void begin(SDL_Window* &window) {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplSDL2_NewFrame(window);
 		ImGui::NewFrame();
@@ -39,6 +49,16 @@ namespace GUI {
 		ImGui::PopStyleVar();
 		ImGui::End();
 	};
+
+	void lightPanel(Light &light) {
+		ImGui::Begin("Light");   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+		ImGui::Text("Position");
+		ImGui::SliderFloat("X", &light.position.x, -32.0f, 32.0f);
+		ImGui::SliderFloat("Y", &light.position.y, -32.0f, 32.0f);
+		ImGui::SliderFloat("Z", &light.position.z, -32.0f, 32.0f);
+		ImGui::SetWindowPos(ImVec2(0, 500), true);
+		ImGui::End();
+	}
 }
 
 #endif
