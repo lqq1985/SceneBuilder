@@ -1,11 +1,23 @@
 #ifndef GUI_MAIN_PANEL_H
 #define GUI_MAIN_PANEL_H
 
+#include <SDL2/SDL.h>
 #include "imgui/imgui.h"
 #include "CameraFreeLook.h"
 
 namespace GUI {
-	void MainPanel(CameraFreeLook &cameraFreeLook) {
+	void begin(SDL_Window* window) {
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplSDL2_NewFrame(window);
+		ImGui::NewFrame();
+	};
+
+	void render() {
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	};
+
+	void mainPanel(CameraFreeLook &cameraFreeLook) {
 		ImGuiWindowFlags window_flags = 0;
 		window_flags |= ImGuiWindowFlags_NoTitleBar;
 		window_flags |= ImGuiWindowFlags_NoScrollbar;

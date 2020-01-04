@@ -114,18 +114,12 @@ int main(int argc, char* args[]) {
 		light.draw(projection, view, lightShader);
 
 		/*-----------
-		IMGUI RENDER
+		GUI RENDER
 		-----------*/
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplSDL2_NewFrame(window);
-		ImGui::NewFrame();
-
-		GUI::MainPanel(camera);
-
+		GUI::begin(window);
+		GUI::mainPanel(camera);
 		light.gui();
-
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		GUI::render();
 		 
 		/*-----------
 		SWAP BUFFER
