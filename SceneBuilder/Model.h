@@ -22,8 +22,8 @@ class Model
 		~Model();
 		void loadModel(std::string filename);
 		void draw(glm::mat4 &projection, glm::mat4 &view, Shader &shader, STModel &structModel, glm::vec3 lightPos, glm::vec3 viewPos);
-	private:
 		std::vector<Mesh> meshes;
+	private:
 		std::string directory;
 		std::vector<Texture> texturesLoaded;
 		void processNode(aiNode *node, const aiScene *scene);

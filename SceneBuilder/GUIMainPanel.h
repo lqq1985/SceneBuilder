@@ -2,6 +2,7 @@
 #define GUI_MAIN_PANEL_H
 
 #include <SDL2/SDL.h>
+#include <glm/glm.hpp>
 #include "imgui/imgui.h"
 #include "CameraFreeLook.h"
 #include "Light.h"
@@ -50,13 +51,36 @@ namespace GUI {
 		ImGui::End();
 	};
 
-	void lightPanel(Light &light) {
+	void lightPanel(Light& light) {
 		ImGui::Begin("Light");   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
 		ImGui::Text("Position");
 		ImGui::SliderFloat("X", &light.position.x, -32.0f, 32.0f);
 		ImGui::SliderFloat("Y", &light.position.y, -32.0f, 32.0f);
 		ImGui::SliderFloat("Z", &light.position.z, -32.0f, 32.0f);
 		ImGui::SetWindowPos(ImVec2(0, 500), true);
+		ImGui::End();
+	};
+
+	void shininess(float& amount) {
+		ImGui::Begin("Shininess");   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+		ImGui::Text("Amount");
+		ImGui::SliderFloat("X", &amount, 0.0f, 64.0f);
+		ImGui::End();
+	};
+
+	void materialSpecular(glm::vec3& specular) {
+		ImGui::Begin("Material Specular");   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+		ImGui::SliderFloat("X", &specular.x, 0.0f, 1.0f);
+		ImGui::SliderFloat("Y", &specular.y, 0.0f, 1.0f);
+		ImGui::SliderFloat("Z", &specular.z, 0.0f, 1.0f);
+		ImGui::End();
+	};
+
+	void lightSpecular(glm::vec3 &specular) {
+		ImGui::Begin("Light Specular");   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+		ImGui::SliderFloat("X", &specular.x, 0.0f, 1.0f);
+		ImGui::SliderFloat("Y", &specular.y, 0.0f, 1.0f);
+		ImGui::SliderFloat("Z", &specular.z, 0.0f, 1.0f);
 		ImGui::End();
 	}
 }
