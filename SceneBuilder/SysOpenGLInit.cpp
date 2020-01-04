@@ -15,6 +15,7 @@ int SystemOpenGLInit::defaults(SDL_Window*& window, SDL_GLContext& context, unsi
 
 	if (engineError = SystemOpenGLInit::initSDL() > 0) return engineError;
 	if (engineError = SystemOpenGLInit::setGlAttributes(sMinor, sMajor) > 0) return engineError;
+	SystemOpenGLInit::initMultisampling(1,4);
 	if (engineError = SystemOpenGLInit::initWindow(window, screenWidth, screenHeight) > 0) return engineError;
 	if (engineError = SystemOpenGLInit::initContext(context, window) > 0) return engineError;
 	if (engineError = SystemOpenGLInit::initGlew() > 0) return engineError;
@@ -28,6 +29,12 @@ int SystemOpenGLInit::setGlAttributes(unsigned int major, unsigned int minor)
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 	return 0;
+}
+
+void SystemOpenGLInit::initMultisampling(int buffers, int sampleSize)
+{
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, buffers);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, sampleSize);
 }
 
 int SystemOpenGLInit::initWindow(SDL_Window*& window, unsigned int width, unsigned int height)

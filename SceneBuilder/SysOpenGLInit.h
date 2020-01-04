@@ -19,6 +19,7 @@ namespace SystemOpenGLInit {
     int initSDL();
     int defaults(SDL_Window* &window, SDL_GLContext &conetxt, unsigned int screenWidth, unsigned int screenHeight, unsigned int sMinor, unsigned int sMajor);
     int setGlAttributes(unsigned int major, unsigned int minor);
+    void initMultisampling(int buffers, int sampleSize);
     int initWindow(SDL_Window* &window, unsigned int width, unsigned int height);
     int initContext(SDL_GLContext& context, SDL_Window*& window);
     int initGlew();

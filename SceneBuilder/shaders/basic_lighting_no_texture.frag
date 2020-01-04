@@ -10,8 +10,8 @@ uniform vec3 viewPos;
 vec3 lightColor = vec3(1,1,1);
 vec3 objectColor = vec3(0.6, 0.6, 0.6);
 float shininess = 32.0f;
-vec3 material_specular = vec3(0.5f, 0.5f, 0.5f);
-vec3 light_specular = vec3(1.0f, 1.0f, 1.0f);
+vec3 material_specular = vec3(0.1f, 0.1f, 0.1f);
+vec3 light_specular = vec3(0.5f, 0.5f, 0.5f);
 
 void main()
 {
