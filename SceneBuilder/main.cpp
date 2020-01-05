@@ -32,7 +32,6 @@ STLight lightProps;
 STMaterial materialProps;
 
 double dt = 1.0f / 60.0;
-bool wireframeToggle = false;
 
 int main(int argc, char* args[]) {
 	/*-----------
