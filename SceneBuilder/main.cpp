@@ -62,7 +62,6 @@ int main(int argc, char* args[]) {
 	-----------*/
 	STModel stLevel;
 	stLevel.position = glm::vec3(0, 0, 0);
-	//box.loadModel("assets/hospitalroom/hp194.obj");
 	level.loadModel("assets/ground/ground.obj");
 
 	STModel stBox;
