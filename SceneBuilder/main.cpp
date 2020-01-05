@@ -31,10 +31,8 @@ bool quit = false;
 STLight lightProps;
 STMaterial materialProps;
 
-// shader uniforms
-float shininess = 32.0f;
-glm::vec3 materialSpecular(0.1f, 0.1f, 0.1f);
-glm::vec3 lightSpecular(0.5f, 0.5f, 0.5f);
+double dt = 1.0f / 60.0;
+bool wireframeToggle = false;
 
 int main(int argc, char* args[]) {
 	/*-----------
@@ -73,9 +71,6 @@ int main(int argc, char* args[]) {
 
 	light.load(glm::vec3(0, 16, 0));
 
-	double dt = 1.0f / 60.0; 
-	bool wireframeToggle = false;
-
 	while (!quit) {
 		/*-----------
 		UPDATE
@@ -102,7 +97,6 @@ int main(int argc, char* args[]) {
 		if (input.isQuit()) quit = true;
 		if (input.isO()) SysOpenGLSetting::wireframe(true);
 		if (input.isP()) SysOpenGLSetting::wireframe(false);
-
 
 		view = camera.getViewMatrix();
 
