@@ -31,8 +31,6 @@ bool quit = false;
 STLight lightProps;
 STMaterial materialProps;
 
-double dt = 1.0f / 60.0;
-
 int main(int argc, char* args[]) {
 	/*-----------
 	OPENGL / SDL
@@ -66,13 +64,33 @@ int main(int argc, char* args[]) {
 	STModel stBox;
 	stBox.position = glm::vec3(0, 12, 0);
 	box.loadModel("assets/box/box.obj");
-
+	 
 	light.load(glm::vec3(0, 16, 0));
 
+	/*------
+	TIMESTEP
+	-------*/
+	double dt = 0.01;
+	double currentTime = SDL_GetTicks();
+	double accumulator = 0.0;
+
+	/*-----------
+	GAME LOOP
+	-----------*/
 	while (!quit) {
-		/*-----------
+		double newTime = SDL_GetTicks();
+		double frameTime = newTime - currentTime;
+		currentTime = newTime;
+		accumulator += frameTime;
+
+		while (accumulator >= dt) {
+			// Perform physics processes
+			accumulator -= dt;
+		}
+
+		/*----
 		UPDATE
-		-----------*/
+		-----*/
 		input.update(dt);
 		if (input.isLShift()) {
 			SysOpenGLSetting::mouseCursor(false);
@@ -93,8 +111,6 @@ int main(int argc, char* args[]) {
 			SysOpenGLSetting::mouseCursor(true);
 		}
 		if (input.isQuit()) quit = true;
-		if (input.isO()) SysOpenGLSetting::wireframe(true);
-		if (input.isP()) SysOpenGLSetting::wireframe(false);
 
 		view = camera.getViewMatrix();
 
