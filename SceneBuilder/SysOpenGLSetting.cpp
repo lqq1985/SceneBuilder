@@ -3,7 +3,7 @@
 void SysOpenGLSetting::defaults(SDL_Window*& window, unsigned int screenWidth, unsigned int screenHeight)
 {
 	SysOpenGLSetting::depthTest(true);
-	SysOpenGLSetting::culling(true);
+	SysOpenGLSetting::culling(false);
 	SysOpenGLSetting::mouseCursor(true);
 	SysOpenGLSetting::mouseCapture(true);
 	SysOpenGLSetting::mouseCenter(window, screenWidth, screenHeight);

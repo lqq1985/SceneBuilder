@@ -1,7 +1,10 @@
 #include "Model.h"
 
-Model::Model()
+// https://gamedev.stackexchange.com/questions/82833/problem-loading-collada-dae-model-using-assimp-in-oepngl-4-4
+
+Model::Model(std::string filename)
 {
+    this->loadModel(filename);
 }
 
 Model::~Model()
@@ -11,7 +14,7 @@ Model::~Model()
 void Model::loadModel(std::string filename)
 {
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile(filename, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+    const aiScene *scene = importer.ReadFile(filename, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenBoundingBoxes);
 
     if (!scene || !scene->mRootNode) {
         std::cout << "ERROR::ASSIMP Could not load model: " << importer.GetErrorString() << std::endl;
@@ -19,24 +22,24 @@ void Model::loadModel(std::string filename)
     else {
         this->directory = filename.substr(0, filename.find_last_of('/'));
 
-        this->processNode(scene->mRootNode, scene);
+        this->processNode(scene->mRootNode, scene, aiMatrix4x4());
     }
 }
 
-void Model::draw(glm::mat4& projection, glm::mat4& view, Shader& shader, STModel& structModel)
+void Model::draw(glm::mat4& projection, glm::mat4& view, Shader& shader)
 {
     shader.use();
-
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, structModel.position); // translate it down so it's at the center of the scene
-    model = glm::scale(model, structModel.scale);	// it's a bit too big for our scene, so scale it down
-
     shader.setMat4("projection", projection);
     shader.setMat4("view", view);
-    shader.setMat4("model", model);
-
 
     for (unsigned int i = 0; i < meshes.size(); i++) {
+        // if (i == 0) continue;
+
+        glm::mat4 model = glm::mat4(1.0f);
+        //model = glm::translate(model, meshes[i].origin); // translate it down so it's at the center of the scene
+
+        shader.setMat4("model", model);
+
         unsigned int diffuseNr = 1;
         unsigned int specularNr = 1;
         unsigned int normalNr = 1;
@@ -72,33 +75,41 @@ void Model::draw(glm::mat4& projection, glm::mat4& view, Shader& shader, STModel
     }
 }
 
-void Model::processNode(aiNode* node, const aiScene* scene)
+void Model::processNode(aiNode* node, const aiScene* scene, aiMatrix4x4 transformation)
 {
+    transformation *= node->mTransformation;
+
     for (unsigned int i = 0; i < node->mNumMeshes; i++) {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        this->meshes.push_back(processMesh(mesh, scene));
+        this->meshes.push_back(processMesh(mesh, scene, transformation));
     }
 
     for (unsigned int i = 0; i < node->mNumChildren; i++)
     {
-        processNode(node->mChildren[i], scene);
+        processNode(node->mChildren[i], scene, transformation);
     }
 }
 
-Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
+Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, aiMatrix4x4 transformation)
 {
-    std::vector<Vertex> vertices = this->vertices(mesh);
+    glm::vec3 extents;
+    glm::vec3 origin;
+
+    std::vector<Vertex> vertices = this->vertices(mesh, extents, origin, transformation);
     std::vector<unsigned int> indices = this->indices(mesh);
     std::vector<Texture> textures = this->textures(mesh, scene);
 
     return Mesh(
         vertices,
         indices,
-        textures
+        textures,
+        extents,
+        origin,
+        mesh->mName
     );
 }
 
-std::vector<Vertex> Model::vertices(aiMesh* mesh)
+std::vector<Vertex> Model::vertices(aiMesh* mesh, glm::vec3& extents, glm::vec3 &origin, aiMatrix4x4 transformation)
 {
     std::vector<Vertex> vertices;
 
@@ -107,10 +118,13 @@ std::vector<Vertex> Model::vertices(aiMesh* mesh)
 
         glm::vec3 vector3;
 
+        aiVector3D v = transformation * mesh->mVertices[i];
+
         // Vertices
-        vector3.x = mesh->mVertices[i].x;
-        vector3.y = mesh->mVertices[i].y;
-        vector3.z = mesh->mVertices[i].z;
+        vector3.x = v.x;
+        vector3.y = v.y;
+        vector3.z = v.z;
+
         vertex.position = vector3;
 
         // Normals
@@ -153,6 +167,18 @@ std::vector<Vertex> Model::vertices(aiMesh* mesh)
         vertices.push_back(vertex);
     }
 
+    glm::vec3 min = glm::vec3(mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z);
+    glm::vec3 max = glm::vec3(mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z);
+
+    extents = (max - min) * 0.5f;
+    origin = glm::vec3((min.x + max.x) / 2.0f, (min.y + max.y) / 2.0f, (min.z + max.z) / 2.0f);
+
+    printf("%f,%f,%f\n", origin.x, origin.y, origin.z);
+
+    // box blender: x = 3, y = -3, z = 6.4697
+    // opengl x = 3, y = 6.4697, z = -3
+    // 3,6.4,3
+
     return vertices;
 }
 
@@ -160,12 +186,16 @@ std::vector<unsigned int> Model::indices(aiMesh* mesh)
 {
     std::vector<unsigned int> indices;
 
+    aiMatrix4x4 m = aiMatrix4x4();
+
     for (unsigned int i = 0; i < mesh->mNumFaces; i++)
     {
          aiFace face = mesh->mFaces[i];
         // retrieve all indices of the face and store them in the indices vector
-        for (unsigned int j = 0; j < face.mNumIndices; j++)
-            indices.push_back(face.mIndices[j]);
+         for (unsigned int j = 0; j < face.mNumIndices; j++) {
+             indices.push_back(face.mIndices[j]);
+         }
+
     }
 
     return indices;
@@ -231,4 +261,17 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType 
         }
     }
     return textures;
+}
+
+glm::mat4 Model::aiMatrix4x4ToGlm(aiMatrix4x4 from)
+{
+    glm::mat4 to;
+
+
+    to[0][0] = (GLfloat)from.a1; to[0][1] = (GLfloat)from.b1;  to[0][2] = (GLfloat)from.c1; to[0][3] = (GLfloat)from.d1;
+    to[1][0] = (GLfloat)from.a2; to[1][1] = (GLfloat)from.b2;  to[1][2] = (GLfloat)from.c2; to[1][3] = (GLfloat)from.d2;
+    to[2][0] = (GLfloat)from.a3; to[2][1] = (GLfloat)from.b3;  to[2][2] = (GLfloat)from.c3; to[2][3] = (GLfloat)from.d3;
+    to[3][0] = (GLfloat)from.a4; to[3][1] = (GLfloat)from.b4;  to[3][2] = (GLfloat)from.c4; to[3][3] = (GLfloat)from.d4;
+
+    return to;
 }

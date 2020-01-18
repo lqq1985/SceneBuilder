@@ -26,7 +26,7 @@ public:
 	float yaw = -90.0f; // this is typicall where the view faces towards. -90 degrees is facing towards the z axis
 	float pitch = -25.0f;
 private:
-	float speed = 2.0f;
+	float speed = 6.0f;
 	float mouseSensitivity = 2.0f;
 	int screenWidthMid;
 	int screenHeightMid;
