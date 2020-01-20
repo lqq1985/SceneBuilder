@@ -24,6 +24,8 @@ private:
 	std::string modelFilenames[1] = {
 		"assets/collada_test/collada_test.dae"
 		//"assets/scene/scene.obj"
+		//"assets/hospitalroom/hp194.obj"
+
 	};
 
 };

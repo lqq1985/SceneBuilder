@@ -27,12 +27,13 @@ void Model::loadModel(std::string filename)
 }
 
 void Model::processNode(aiNode* node, const aiScene* scene, aiMatrix4x4 transformation)
-{
-    // only apply transformation on meshs not entities such as lights or camera.
-    transformation *= node->mTransformation;
- 
+{ 
     for (unsigned int i = 0; i < node->mNumMeshes; i++) {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+
+        // only apply transformation on meshs not entities such as lights or camera.
+        transformation *= node->mTransformation;
+
         this->meshes.push_back(processMesh(mesh, scene, transformation));
     }
 
