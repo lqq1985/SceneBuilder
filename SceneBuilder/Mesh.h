@@ -1,10 +1,13 @@
 #ifndef MESH_H
 #define MESH_H
 
+#include <assimp/Importer.hpp>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <vector>
 #include <string>
+#include <string>
+#include "Shader.h"
 
 struct Vertex {
 	glm::vec3 position;
@@ -23,12 +26,23 @@ struct Texture {
 class Mesh
 {
 	public:
-		Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+		Mesh(
+			std::vector<Vertex> vertices,
+			std::vector<unsigned int> indices,
+			std::vector<Texture> textures,
+			glm::vec3 extents,
+			glm::vec3 origin,
+			aiString name,
+			glm::mat4 mTransform
+		);
 		~Mesh();
-
 		std::vector<Vertex> vertices;
 		std::vector<unsigned int> indices;
 		std::vector<Texture> textures;
+		glm::vec3 extents;
+		glm::vec3 origin;
+		glm::mat4 mTransform;
+		aiString name;
 
 		unsigned int VAO, VBO, EBO;
 	private:

@@ -30,7 +30,7 @@ namespace GUI {
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	};
 
-	void mainPanel(CameraFreeLook &cameraFreeLook, Light& light, STLight &stLight, STMaterial &stMaterial) {
+	void mainPanel(CameraFreeLook &cameraFreeLook, Light& light, STLight &stLight, STMaterial &stMaterial, bool &grid) {
 		ImGuiWindowFlags window_flags = 0;
 		window_flags |= ImGuiWindowFlags_NoTitleBar;
 		window_flags |= ImGuiWindowFlags_NoScrollbar;
@@ -72,6 +72,9 @@ namespace GUI {
 		ImGui::SliderFloat("LightSpec X", &stLight.specular.x, 0.0f, 1.0f);
 		ImGui::SliderFloat("LightSpec Y", &stLight.specular.y, 0.0f, 1.0f);
 		ImGui::SliderFloat("LightSpec Z", &stLight.specular.z, 0.0f, 1.0f);
+
+		ImGui::Separator();
+		ImGui::Checkbox("Show Grid", &grid);
 
 		ImGui::PopStyleVar();
 		ImGui::End();

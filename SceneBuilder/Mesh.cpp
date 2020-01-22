@@ -1,10 +1,14 @@
 #include "Mesh.h"
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, glm::vec3 extents, glm::vec3 origin, aiString name, glm::mat4 mTransform)
 {
 	this->vertices = vertices;
 	this->indices = indices;
 	this->textures = textures;
+    this->extents = extents;
+    this->origin = origin;
+    this->name = name;
+    this->mTransform = mTransform;
 
     this->setup();
 }

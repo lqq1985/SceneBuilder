@@ -5,9 +5,6 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
-
-//#include <bullet/btBulletCollisionCommon.h>
-//#include <bullet/btBulletDynamicsCommon.h>
 #include <iostream>
 
 #include "SysOpenGLInit.h"
@@ -21,14 +18,19 @@
 #include "GUI.h"
 #include "STLight.h"
 #include "STMaterial.h"
+#include "Physics.h"
+#include "Scene.h"
+#include "Grid.h"
 
 SDL_Window* window;
 SDL_GLContext context;
 unsigned int SCREEN_WIDTH = 1280;
 unsigned int SCREEN_HEIGHT = 720;
 bool quit = false;
+bool showGrid = true;
 
 STLight lightProps;
+STLight lightProps2;
 STMaterial materialProps;
 
 int main(int argc, char* args[]) {
@@ -43,27 +45,23 @@ int main(int argc, char* args[]) {
 	--------------*/
 	GUI::init(window, context);
 
-	Model level = Model();
-	Model box = Model();
+	Scene scene = Scene();
 	Input input = Input();
 	CameraFreeLook camera = CameraFreeLook(SCREEN_WIDTH, SCREEN_HEIGHT);
 	Light light = Light();
+	Grid grid = Grid();
 	Shader modelShader = Shader("shaders/basic_lighting_no_texture.vert", "shaders/basic_lighting_no_texture.frag");
 	Shader lightShader = Shader("shaders/light.vert", "shaders/light.frag");
 
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 	glm::mat4 view = camera.getViewMatrix();
 
+	Physics physics = Physics();
+
 	/*-----------
 	LOAD MODELS
 	-----------*/
-	STModel stLevel;
-	stLevel.position = glm::vec3(0, 0, 0);
-	level.loadModel("assets/ground/ground.obj");
-
-	STModel stBox;
-	stBox.position = glm::vec3(0, 12, 0);
-	box.loadModel("assets/box/box.obj");
+	scene.load();
 	 
 	light.load(glm::vec3(0, 16, 0));
 
@@ -74,7 +72,7 @@ int main(int argc, char* args[]) {
 	double currentTime = SDL_GetTicks();
 	double accumulator = 0.0;
 
-	/*-----------
+	/*----------- 
 	GAME LOOP
 	-----------*/
 	while (!quit) {
@@ -85,8 +83,12 @@ int main(int argc, char* args[]) {
 
 		while (accumulator >= dt) {
 			// Perform physics processes
+
+			
 			accumulator -= dt;
 		}
+
+		//physics.simulate();
 
 		/*----
 		UPDATE
@@ -118,6 +120,8 @@ int main(int argc, char* args[]) {
 		RENDER MODELS
 		-----------*/
 
+		if (showGrid) grid.render(projection, view, camera.getCameraPosition());
+
 		modelShader.use();
 		modelShader.setFloat("shininess", materialProps.shininess);
 		modelShader.setVec3("material_specular", materialProps.specular);
@@ -125,16 +129,19 @@ int main(int argc, char* args[]) {
 		modelShader.setVec3("lightPos", light.position);
 		modelShader.setVec3("viewPos", camera.getCameraPosition());
 
-		level.draw(projection, view, modelShader, stLevel);
-		box.draw(projection, view, modelShader, stBox);
+		scene.render(projection, view, modelShader);
 		light.draw(projection, view, lightShader);
+
+		
+
+		// physics.drawDebugData(projection, view);
 
 		/*-----------
 		GUI RENDER
 		-----------*/
 
 		GUI::begin(window);
-		GUI::mainPanel(camera, light, lightProps, materialProps);
+		GUI::mainPanel(camera, light, lightProps, materialProps, showGrid);
 		GUI::render();
 		 
 		/*-----------
@@ -142,7 +149,7 @@ int main(int argc, char* args[]) {
 		-----------*/
 		SDL_GL_SwapWindow(window);
 
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glViewport(0, 0, (int)SCREEN_WIDTH, (int)SCREEN_HEIGHT);
 	}

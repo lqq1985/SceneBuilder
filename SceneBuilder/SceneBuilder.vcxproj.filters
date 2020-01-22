@@ -22,6 +22,9 @@
     <Filter Include="Vendor\imgui">
       <UniqueIdentifier>{238cfd6e-635c-4c91-890d-a7c2eaa21107}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Structs">
+      <UniqueIdentifier>{38bb0407-8e70-4240-b815-e90ff62a6a8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraFreeLook.h">
@@ -57,12 +60,6 @@
     <ClInclude Include="stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="STModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="STVertex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SysOpenGLInit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -96,10 +93,28 @@
     <ClInclude Include="GUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="STLight.h">
+    <ClInclude Include="Physics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GLDebugDrawer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="STLight.h">
+      <Filter>Structs</Filter>
+    </ClInclude>
     <ClInclude Include="STMaterial.h">
+      <Filter>Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="STModel.h">
+      <Filter>Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="STVertex.h">
+      <Filter>Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -164,6 +179,15 @@
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Physics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\light.frag">
@@ -215,6 +239,18 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="shaders\diffuse.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\debug.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\debug.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\grid.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\grid.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
