@@ -23,7 +23,7 @@ private:
 	// data
 	std::string modelFilenames[1] = {
 		"assets/collada_test/collada_test.dae"
-		//"assets/scene/scene.obj"
+		//"assets/collada_test/test.obj"
 		//"assets/hospitalroom/hp194.obj"
 
 	};

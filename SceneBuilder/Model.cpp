@@ -48,7 +48,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, aiMatrix4x4 transfor
     glm::vec3 extents;
     glm::vec3 origin;
 
-    std::vector<Vertex> vertices = this->vertices(mesh, extents, origin, transformation);
+    std::vector<Vertex> vertices = this->vertices(mesh, extents, origin);
     std::vector<unsigned int> indices = this->indices(mesh);
     std::vector<Texture> textures = this->textures(mesh, scene);
 
@@ -58,11 +58,12 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, aiMatrix4x4 transfor
         textures,
         extents,
         origin,
-        mesh->mName
+        mesh->mName,
+        this->aiMatrix4x4ToGlm(transformation)
     );
 }
 
-std::vector<Vertex> Model::vertices(aiMesh* mesh, glm::vec3& extents, glm::vec3 &origin, aiMatrix4x4 transformation)
+std::vector<Vertex> Model::vertices(aiMesh* mesh, glm::vec3& extents, glm::vec3 &origin)
 {
     std::vector<Vertex> vertices;
 
@@ -71,7 +72,7 @@ std::vector<Vertex> Model::vertices(aiMesh* mesh, glm::vec3& extents, glm::vec3 
 
         glm::vec3 vector3;
 
-        aiVector3D v = transformation * mesh->mVertices[i];
+        aiVector3D v = mesh->mVertices[i];
 
         // Vertices
         vector3.x = v.x;
@@ -127,10 +128,6 @@ std::vector<Vertex> Model::vertices(aiMesh* mesh, glm::vec3& extents, glm::vec3 
     origin = glm::vec3((min.x + max.x) / 2.0f, (min.y + max.y) / 2.0f, (min.z + max.z) / 2.0f);
 
     printf("%f,%f,%f\n", origin.x, origin.y, origin.z);
-
-    // box blender: x = 3, y = -3, z = 6.4697
-    // opengl x = 3, y = 6.4697, z = -3
-    // 3,6.4,3
 
     return vertices;
 }
@@ -223,12 +220,7 @@ void Model::draw(glm::mat4& projection, glm::mat4& view, Shader& shader)
     shader.setMat4("view", view);
 
     for (unsigned int i = 0; i < meshes.size(); i++) {
-        // if (i == 0) continue;
-
-        glm::mat4 model = glm::mat4(1.0f);
-        //model = glm::translate(model, meshes[i].origin); // translate it down so it's at the center of the scene
-
-        shader.setMat4("model", model);
+        shader.setMat4("model", meshes[i].mTransform);
 
         unsigned int diffuseNr = 1;
         unsigned int specularNr = 1;
