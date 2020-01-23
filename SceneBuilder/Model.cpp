@@ -48,9 +48,18 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, aiMatrix4x4 transfor
     glm::vec3 extents;
     glm::vec3 origin;
 
-    std::vector<Vertex> vertices = this->vertices(mesh, extents, origin);
-    std::vector<unsigned int> indices = this->indices(mesh);
-    std::vector<Texture> textures = this->textures(mesh, scene);
+    std::vector<Vertex> vertices = this->getVertices(mesh, extents, origin);
+    std::vector<unsigned int> indices = this->getIndices(mesh);
+    std::vector<Texture> textures = this->getTexures(mesh, scene);
+
+    std::string name = mesh->mName.C_Str();
+
+    for (int i = 0; i < vertices.size(); i++) {
+        glm::vec3 v = glm::vec3(this->aiMatrix4x4ToGlm(transformation) * glm::vec4(vertices[i].position, 0.0f));
+
+        printf("original: %f, %f, %f\n", vertices[i].position.x, vertices[i].position.y, vertices[i].position.z);
+        printf("transformed: %f, %f, %f\n", v.x, v.y, v.z);
+    }
 
     return Mesh(
         vertices,
@@ -58,12 +67,12 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, aiMatrix4x4 transfor
         textures,
         extents,
         origin,
-        mesh->mName,
+        name,
         this->aiMatrix4x4ToGlm(transformation)
     );
 }
 
-std::vector<Vertex> Model::vertices(aiMesh* mesh, glm::vec3& extents, glm::vec3 &origin)
+std::vector<Vertex> Model::getVertices(aiMesh* mesh, glm::vec3& extents, glm::vec3 &origin)
 {
     std::vector<Vertex> vertices;
 
@@ -130,7 +139,7 @@ std::vector<Vertex> Model::vertices(aiMesh* mesh, glm::vec3& extents, glm::vec3 
     return vertices;
 }
 
-std::vector<unsigned int> Model::indices(aiMesh* mesh)
+std::vector<unsigned int> Model::getIndices(aiMesh* mesh)
 {
     std::vector<unsigned int> indices;
 
@@ -147,29 +156,29 @@ std::vector<unsigned int> Model::indices(aiMesh* mesh)
     return indices;
 }
 
-std::vector<Texture> Model::textures(aiMesh* mesh, const aiScene* scene)
+std::vector<Texture> Model::getTexures(aiMesh* mesh, const aiScene* scene)
 {
     std::vector<Texture> textures;
 
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
     // 1. diffuse maps
-    std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+    std::vector<Texture> diffuseMaps = loadTextureFiles(material, aiTextureType_DIFFUSE, "texture_diffuse");
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
     // 2. specular maps
-    std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+    std::vector<Texture> specularMaps = loadTextureFiles(material, aiTextureType_SPECULAR, "texture_specular");
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     // 3. normal maps
-    std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+    std::vector<Texture> normalMaps = loadTextureFiles(material, aiTextureType_HEIGHT, "texture_normal");
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
     // 4. height maps
-    std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+    std::vector<Texture> heightMaps = loadTextureFiles(material, aiTextureType_AMBIENT, "texture_height");
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
     return textures;
 }
 
-std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
+std::vector<Texture> Model::loadTextureFiles(aiMaterial* mat, aiTextureType type, std::string typeName)
 {
     std::vector<Texture> textures;
     for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)

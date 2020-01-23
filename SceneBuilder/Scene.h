@@ -7,6 +7,7 @@
 #include "Shader.h"
 #include "Model.h"
 #include "Physics.h"
+#include "MeshManager.h"
 
 class Scene
 {
@@ -17,7 +18,7 @@ public:
 	void simulate();
 	void render(glm::mat4 &projection, glm::mat4 &view, Shader &shader);
 private:
-	std::vector<Model*> models; 
+	std::vector<Model*> models;
 	Physics* phyics;
 
 	// data

@@ -111,10 +111,13 @@
     <ClInclude Include="STVertex.h">
       <Filter>Structs</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
+    <ClInclude Include="Grid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Grid.h">
+    <ClInclude Include="MeshManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Render.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -182,10 +185,13 @@
     <ClCompile Include="Physics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
+    <ClCompile Include="Grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Grid.cpp">
+    <ClCompile Include="MeshManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

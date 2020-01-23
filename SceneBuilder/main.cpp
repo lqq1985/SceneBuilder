@@ -19,8 +19,9 @@
 #include "STLight.h"
 #include "STMaterial.h"
 #include "Physics.h"
-#include "Scene.h"
 #include "Grid.h"
+#include "MeshManager.h"
+#include "Render.h"
 
 SDL_Window* window;
 SDL_GLContext context;
@@ -45,13 +46,16 @@ int main(int argc, char* args[]) {
 	--------------*/
 	GUI::init(window, context);
 
-	Scene scene = Scene();
 	Input input = Input();
 	CameraFreeLook camera = CameraFreeLook(SCREEN_WIDTH, SCREEN_HEIGHT);
 	Light light = Light();
 	Grid grid = Grid();
 	Shader modelShader = Shader("shaders/basic_lighting_no_texture.vert", "shaders/basic_lighting_no_texture.frag");
 	Shader lightShader = Shader("shaders/light.vert", "shaders/light.frag");
+	MeshManager meshManager = MeshManager();
+
+	//meshManager.loadModel("assets/collada_test/collada_test.dae");
+	meshManager.loadModel("assets/test_level/test_level_1.dae");
 
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 	glm::mat4 view = camera.getViewMatrix();
@@ -61,7 +65,6 @@ int main(int argc, char* args[]) {
 	/*-----------
 	LOAD MODELS
 	-----------*/
-	scene.load();
 	 
 	light.load(glm::vec3(0, 16, 0));
 
@@ -129,10 +132,10 @@ int main(int argc, char* args[]) {
 		modelShader.setVec3("lightPos", light.position);
 		modelShader.setVec3("viewPos", camera.getCameraPosition());
 
-		scene.render(projection, view, modelShader);
+		// scene.render(projection, view, modelShader);
 		light.draw(projection, view, lightShader);
 
-		
+		Render::mesh(meshManager.getMeshes(), projection, view, modelShader);
 
 		// physics.drawDebugData(projection, view);
 

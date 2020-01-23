@@ -29,10 +29,10 @@ class Model
 		std::vector<Texture> texturesLoaded;
 		void processNode(aiNode *node, const aiScene *scene, aiMatrix4x4 transformation);
 		Mesh processMesh(aiMesh* mesh, const aiScene* scene, aiMatrix4x4 transformation);
-		std::vector<Vertex> vertices(aiMesh* mesh, glm::vec3 &extents, glm::vec3 &origin);
-		std::vector<unsigned int> indices(aiMesh* mesh);
-		std::vector<Texture> textures(aiMesh* mesh, const aiScene* scene);
-		std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
+		std::vector<Vertex> getVertices(aiMesh* mesh, glm::vec3 &extents, glm::vec3 &origin);
+		std::vector<unsigned int> getIndices(aiMesh* mesh);
+		std::vector<Texture> getTexures(aiMesh* mesh, const aiScene* scene);
+		std::vector<Texture> loadTextureFiles(aiMaterial* mat, aiTextureType type, std::string typeName);
 		glm::mat4 aiMatrix4x4ToGlm(aiMatrix4x4 from);
 }; 
 
