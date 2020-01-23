@@ -127,16 +127,12 @@ std::vector<Vertex> Model::vertices(aiMesh* mesh, glm::vec3& extents, glm::vec3 
     extents = (max - min) * 0.5f;
     origin = glm::vec3((min.x + max.x) / 2.0f, (min.y + max.y) / 2.0f, (min.z + max.z) / 2.0f);
 
-    printf("%f,%f,%f\n", origin.x, origin.y, origin.z);
-
     return vertices;
 }
 
 std::vector<unsigned int> Model::indices(aiMesh* mesh)
 {
     std::vector<unsigned int> indices;
-
-    aiMatrix4x4 m = aiMatrix4x4();
 
     for (unsigned int i = 0; i < mesh->mNumFaces; i++)
     {

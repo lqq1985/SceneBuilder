@@ -27,8 +27,13 @@ void Scene::load()
 		for (int j = 0; j < m->meshes.size(); j++) {
 			// this->phyics->addBoxShape(glm::vec3(1,1,1), m->meshes[j].extents, false);
 			// this->phyics->addBoxShape(m->meshes[j].origin, m->meshes[j].extents, false);
-		}
 
+			glm::vec3 p = m->meshes[j].mTransform * glm::vec4(m->meshes[j].origin, 1.0f);
+
+			this->phyics->addBoxShape(p, m->meshes[j].extents, false);
+			printf("pos: %f, %f, %f\n", p.x, p.y, p.z);
+		}
+		
 		this->models.push_back(m);
 	}
 }
