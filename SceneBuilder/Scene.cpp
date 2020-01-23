@@ -23,16 +23,6 @@ void Scene::load()
 	// Load models
 	for (int i = 0; i < sizeof(this->modelFilenames)/sizeof(this->modelFilenames[0]); i++) {
 		Model* m = new Model(this->modelFilenames[i]);
-
-		for (int j = 0; j < m->meshes.size(); j++) {
-			// this->phyics->addBoxShape(glm::vec3(1,1,1), m->meshes[j].extents, false);
-			// this->phyics->addBoxShape(m->meshes[j].origin, m->meshes[j].extents, false);
-
-			glm::vec3 p = m->meshes[j].mTransform * glm::vec4(m->meshes[j].origin, 1.0f);
-
-			this->phyics->addBoxShape(p, m->meshes[j].extents, false);
-			printf("pos: %f, %f, %f\n", p.x, p.y, p.z);
-		}
 		
 		this->models.push_back(m);
 	}
@@ -51,5 +41,5 @@ void Scene::render(glm::mat4& projection, glm::mat4& view, Shader& shader)
 		this->models[i]->draw(projection, view, shader);
 	}
 
-	this->phyics->drawDebugData(projection, view);
+	//  this->phyics->drawDebugData(projection, view);
 }
