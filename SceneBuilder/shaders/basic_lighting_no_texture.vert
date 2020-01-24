@@ -14,6 +14,6 @@ uniform float scale;
 void main()
 {
     FragPos = vec3(model * vec4(aPos, 1.0));
-    Normal = vec3(model * vec4(aNormal, 0.0));
+    Normal = aNormal;
     gl_Position = projection * view * vec4(FragPos, 1.0);
 }

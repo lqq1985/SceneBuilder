@@ -46,20 +46,16 @@ void Model::processNode(aiNode* node, const aiScene* scene, aiMatrix4x4 transfor
 Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, aiMatrix4x4 transformation)
 {
     glm::vec3 extents;
-    glm::vec3 origin;
+    glm::mat4 transform = this->aiMatrix4x4ToGlm(transformation);
+    glm::vec3 origin = transform[3];
 
-    std::vector<Vertex> vertices = this->getVertices(mesh, extents, origin);
+    printf("origin: %f, %f, %f\n", origin.x, origin.y, origin.z);
+
+    std::vector<Vertex> vertices = this->getVertices(mesh, extents, transform);
     std::vector<unsigned int> indices = this->getIndices(mesh);
     std::vector<Texture> textures = this->getTexures(mesh, scene);
 
     std::string name = mesh->mName.C_Str();
-
-    for (int i = 0; i < vertices.size(); i++) {
-        glm::vec3 v = glm::vec3(this->aiMatrix4x4ToGlm(transformation) * glm::vec4(vertices[i].position, 0.0f));
-
-        printf("original: %f, %f, %f\n", vertices[i].position.x, vertices[i].position.y, vertices[i].position.z);
-        printf("transformed: %f, %f, %f\n", v.x, v.y, v.z);
-    }
 
     return Mesh(
         vertices,
@@ -72,29 +68,23 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, aiMatrix4x4 transfor
     );
 }
 
-std::vector<Vertex> Model::getVertices(aiMesh* mesh, glm::vec3& extents, glm::vec3 &origin)
+std::vector<Vertex> Model::getVertices(aiMesh* mesh, glm::vec3& extents, glm::mat4& transform)
 {
     std::vector<Vertex> vertices;
 
     for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
         Vertex vertex;
 
-        glm::vec3 vector3;
-
-        aiVector3D v = mesh->mVertices[i];
-
-        // Vertices
-        vector3.x = v.x;
-        vector3.y = v.y;
-        vector3.z = v.z;
+        // Convert vertices from model space to world space
+        glm::vec3 vector3 = glm::vec3(transform * glm::vec4(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z, 1.0f));
 
         vertex.position = vector3;
 
         // Normals
         if (mesh->mNormals) {
-            vector3.x = mesh->mNormals[i].x;
-            vector3.y = mesh->mNormals[i].y;
-            vector3.z = mesh->mNormals[i].z;
+                
+            // Convert normals from model space to world space
+            vector3 = glm::vec3(transform * glm::vec4(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z, 0.0f));
             vertex.normal = vector3;
         }
 
@@ -130,11 +120,12 @@ std::vector<Vertex> Model::getVertices(aiMesh* mesh, glm::vec3& extents, glm::ve
         vertices.push_back(vertex);
     }
 
-    glm::vec3 min = glm::vec3(mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z);
-    glm::vec3 max = glm::vec3(mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z);
+    glm::vec3 min = glm::vec3(transform * glm::vec4(mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z, 1.0f));
+    glm::vec3 max = glm::vec3(transform * glm::vec4(mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z, 1.0f));
 
     extents = (max - min) * 0.5f;
-    origin = glm::vec3((min.x + max.x) / 2.0f, (min.y + max.y) / 2.0f, (min.z + max.z) / 2.0f);
+
+    printf("extents: %f, %f, %f\n", extents.x, extents.y, extents.z);
 
     return vertices;
 }
