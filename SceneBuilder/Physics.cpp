@@ -51,7 +51,7 @@ void Physics::simulate(double dt)
 	dynamicsWorld->stepSimulation(dt);
 }
 
-void Physics::addStaticBox(glm::vec3 position, glm::vec3 extents)
+void Physics::addStaticBox(glm::vec3 position, glm::vec3 extents, Mesh mesh)
 {
 	printf("extents static: %f, %f, %f\n", extents.x, extents.y, extents.z);
 	// btBoxShape vectors must all be positive
@@ -63,6 +63,8 @@ void Physics::addStaticBox(glm::vec3 position, glm::vec3 extents)
 	btTransform groundTransform;
 	groundTransform.setIdentity();
 	groundTransform.setOrigin(btVector3(position.x, position.y, position.z));
+	groundTransform.setOrigin(btVector3(mesh.mTransform[3][0], mesh.mTransform[3][1], mesh.mTransform[3][2]));
+
 
 	btScalar mass(0.);
 
