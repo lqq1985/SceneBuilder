@@ -8,7 +8,7 @@ Physics::Physics()
 	this->solver = new btSequentialImpulseConstraintSolver;
 	this->dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 
-	dynamicsWorld->setGravity(btVector3(0, -10, 0));
+	dynamicsWorld->setGravity(btVector3(0, -1, 0));
 
 	this->dynamicsWorld->setDebugDrawer(&this->debugDrawerOpenGL);
 	this->dynamicsWorld->getDebugDrawer()->setDebugMode(3);
@@ -46,9 +46,9 @@ Physics::~Physics()
 	delete this->collisionConfiguration;
 }
 
-void Physics::simulate(std::vector<glm::vec3>& objects)
+void Physics::simulate()
 {
-	dynamicsWorld->stepSimulation(1.f / 60.f);
+	dynamicsWorld->stepSimulation(1.f / 60.f, 10);
 
 	//print positions of all objects
 	for (int j = dynamicsWorld->getNumCollisionObjects() - 1; j >= 0; j--)
@@ -65,8 +65,6 @@ void Physics::simulate(std::vector<glm::vec3>& objects)
 			trans = obj->getWorldTransform();
 		}
 
-		objects.push_back(glm::vec3(float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ())));
-
 		//printf("world pos object %d = %f,%f,%fd\n", j, float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ()));
 	}
 }
@@ -81,7 +79,7 @@ void Physics::addBoxShape(glm::vec3 position, glm::vec3 extents, bool hasMass)
 	groundTransform.setIdentity();
 	groundTransform.setOrigin(btVector3(position.x, position.y, position.z));
 
-	btScalar mass = hasMass ? 1.0f : 0.0f;
+	btScalar mass = hasMass ? 1.0f : 0.f;
 	
 	//rigidbody is dynamic if and only if mass is non zero, otherwise static
 	bool isDynamic = (mass != 0.f);

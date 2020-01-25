@@ -58,12 +58,20 @@ int main(int argc, char* args[]) {
 	Physics physics = Physics();
 
 	 meshManager.loadModel("assets/collada_test/collada_test.dae");
-	// meshManager.loadModel("assets/test_level/test_level.dae");
+	 //meshManager.loadModel("assets/test_level/test_level.dae");
 	
 	std::vector<Mesh> meshes = meshManager.getMeshes();
 
 	for (int i = 0; i < meshes.size(); i++) {
-		physics.addBoxShape(meshes[i].origin, meshes[i].extents, false);
+		std::cout << meshes[i].name << std::endl;
+		
+		bool mass = true;
+
+		if (meshes[i].name == "GROUND_1" || meshes[i].name == "GROUND_2") {
+			mass = false;
+		}
+
+		physics.addBoxShape(meshes[i].origin, meshes[i].extents, mass);
 	}
 
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
@@ -94,7 +102,6 @@ int main(int argc, char* args[]) {
 		while (accumulator >= dt) {
 			// Perform physics processes
 
-			
 			accumulator -= dt;
 		}
 
@@ -129,6 +136,8 @@ int main(int argc, char* args[]) {
 		/*-----------
 		RENDER MODELS
 		-----------*/
+
+		physics.simulate();
 
 		if (showGrid) grid.render(projection, view, camera.getCameraPosition());
 
