@@ -64,14 +64,14 @@ int main(int argc, char* args[]) {
 
 	for (int i = 0; i < meshes.size(); i++) {
 		std::cout << meshes[i].name << std::endl;
-		
-		bool mass = true;
+	
 
 		if (meshes[i].name == "GROUND_1" || meshes[i].name == "GROUND_2") {
-			mass = false;
+			physics.addStaticBox(meshes[i].origin, meshes[i].extents);
 		}
-
-		physics.addBoxShape(meshes[i].origin, meshes[i].extents, mass);
+		else {
+			physics.addDynamicBox(meshes[i].origin, meshes[i].extents);
+		}
 	}
 
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
@@ -86,6 +86,7 @@ int main(int argc, char* args[]) {
 	/*------
 	TIMESTEP
 	-------*/
+	double t = 0.0;
 	double dt = 0.01;
 	double currentTime = SDL_GetTicks();
 	double accumulator = 0.0;
@@ -96,16 +97,22 @@ int main(int argc, char* args[]) {
 	while (!quit) {
 		double newTime = SDL_GetTicks();
 		double frameTime = newTime - currentTime;
+
+		if (frameTime > 0.25) {
+			frameTime = 0.25;
+		}
+
 		currentTime = newTime;
 		accumulator += frameTime;
 
 		while (accumulator >= dt) {
 			// Perform physics processes
-
+			
 			accumulator -= dt;
 		}
 
 		//physics.simulate();
+		physics.simulate(dt);
 
 		/*----
 		UPDATE
@@ -136,8 +143,6 @@ int main(int argc, char* args[]) {
 		/*-----------
 		RENDER MODELS
 		-----------*/
-
-		physics.simulate();
 
 		if (showGrid) grid.render(projection, view, camera.getCameraPosition());
 

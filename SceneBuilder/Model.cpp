@@ -49,8 +49,6 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, aiMatrix4x4 transfor
     glm::mat4 transform = this->aiMatrix4x4ToGlm(transformation);
     glm::vec3 origin = transform[3];
 
-    printf("origin: %f, %f, %f\n", origin.x, origin.y, origin.z);
-
     std::vector<Vertex> vertices = this->getVertices(mesh, extents, transform);
     std::vector<unsigned int> indices = this->getIndices(mesh);
     std::vector<Texture> textures = this->getTexures(mesh, scene);
@@ -125,7 +123,7 @@ std::vector<Vertex> Model::getVertices(aiMesh* mesh, glm::vec3& extents, glm::ma
 
     extents = (max - min) * 0.5f;
 
-    printf("extents: %f, %f, %f\n", extents.x, extents.y, extents.z);
+    printf("extents: %f, %f, %f\n", extents.x, extents.y, abs(extents.z));
 
     return vertices;
 }

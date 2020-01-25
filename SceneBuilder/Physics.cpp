@@ -8,7 +8,7 @@ Physics::Physics()
 	this->solver = new btSequentialImpulseConstraintSolver;
 	this->dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 
-	dynamicsWorld->setGravity(btVector3(0, -1, 0));
+	dynamicsWorld->setGravity(btVector3(0, -10, 0));
 
 	this->dynamicsWorld->setDebugDrawer(&this->debugDrawerOpenGL);
 	this->dynamicsWorld->getDebugDrawer()->setDebugMode(3);
@@ -46,31 +46,14 @@ Physics::~Physics()
 	delete this->collisionConfiguration;
 }
 
-void Physics::simulate()
+void Physics::simulate(double dt)
 {
-	dynamicsWorld->stepSimulation(1.f / 60.f, 10);
-
-	//print positions of all objects
-	for (int j = dynamicsWorld->getNumCollisionObjects() - 1; j >= 0; j--)
-	{
-		btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[j];
-		btRigidBody* body = btRigidBody::upcast(obj);
-		btTransform trans;
-		if (body && body->getMotionState())
-		{
-			body->getMotionState()->getWorldTransform(trans);
-		}
-		else
-		{
-			trans = obj->getWorldTransform();
-		}
-
-		//printf("world pos object %d = %f,%f,%fd\n", j, float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ()));
-	}
+	dynamicsWorld->stepSimulation(dt);
 }
 
-void Physics::addBoxShape(glm::vec3 position, glm::vec3 extents, bool hasMass)
+void Physics::addStaticBox(glm::vec3 position, glm::vec3 extents)
 {
+
 	btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(extents.x), btScalar(extents.y), btScalar(extents.z)));
 
 	this->collisionShapes.push_back(groundShape);
@@ -79,8 +62,8 @@ void Physics::addBoxShape(glm::vec3 position, glm::vec3 extents, bool hasMass)
 	groundTransform.setIdentity();
 	groundTransform.setOrigin(btVector3(position.x, position.y, position.z));
 
-	btScalar mass = hasMass ? 1.0f : 0.f;
-	
+	btScalar mass(0.);
+
 	//rigidbody is dynamic if and only if mass is non zero, otherwise static
 	bool isDynamic = (mass != 0.f);
 
@@ -94,6 +77,37 @@ void Physics::addBoxShape(glm::vec3 position, glm::vec3 extents, bool hasMass)
 	btRigidBody* body = new btRigidBody(rbInfo);
 
 	//add the body to the dynamics world
+	this->dynamicsWorld->addRigidBody(body);
+}
+
+void Physics::addDynamicBox(glm::vec3 position, glm::vec3 extents)
+{
+	//create a dynamic rigidbody
+
+	//btCollisionShape* colShape = new btBoxShape(btVector3(1,1,1));
+	btCollisionShape* colShape = new btBoxShape(btVector3(btScalar(extents.x), btScalar(extents.y), btScalar(extents.z)));
+	this->collisionShapes.push_back(colShape);
+
+	/// Create Dynamic Objects
+	btTransform startTransform;
+	startTransform.setIdentity();
+
+	btScalar mass(1.f);
+
+	//rigidbody is dynamic if and only if mass is non zero, otherwise static
+	bool isDynamic = (mass != 0.f);
+
+	btVector3 localInertia(0, 0, 0);
+	if (isDynamic)
+		colShape->calculateLocalInertia(mass, localInertia);
+
+	startTransform.setOrigin(btVector3(position.x, position.y, position.z));
+
+	//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
+	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
+	btRigidBody* body = new btRigidBody(rbInfo);
+
 	this->dynamicsWorld->addRigidBody(body);
 }
 
