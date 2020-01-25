@@ -10,6 +10,8 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std:
     this->name = name;
     this->mTransform = mTransform;
 
+    glm::decompose(mTransform, this->scale, this->rotation, this->position, this->skew, this->perspective);
+
     this->setup();
 }
 

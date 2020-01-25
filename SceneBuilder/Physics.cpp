@@ -62,7 +62,7 @@ void Physics::addStaticBox(Mesh &mesh)
 
 	btTransform groundTransform;
 	groundTransform.setIdentity();
-	groundTransform.setOrigin(btVector3(mesh.mTransform[3][0], mesh.mTransform[3][1], mesh.mTransform[3][2]));
+	groundTransform.setOrigin(btVector3(mesh.position.x, mesh.position.y, mesh.position.z));
 
 
 	btScalar mass(0.);
@@ -105,7 +105,7 @@ void Physics::addDynamicBox(Mesh &mesh)
 	if (isDynamic)
 		colShape->calculateLocalInertia(mass, localInertia);
 
-	startTransform.setOrigin(btVector3(mesh.mTransform[3][0], mesh.mTransform[3][1], mesh.mTransform[3][2]));
+	startTransform.setOrigin(btVector3(mesh.position.x, mesh.position.y, mesh.position.z));
 
 	//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
