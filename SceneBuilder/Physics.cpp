@@ -53,7 +53,6 @@ void Physics::simulate(double dt)
 
 void Physics::addStaticBox(Mesh &mesh)
 {
-	printf("extents static: %f, %f, %f\n", mesh.extents.x, mesh.extents.y, mesh.extents.z);
 	// btBoxShape vectors must all be positive
 	btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(mesh.extents.x), btScalar(mesh.extents.y), btScalar(mesh.extents.z)));
 	// btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(1.0), btScalar(1.0), btScalar(1.0)));
@@ -85,7 +84,6 @@ void Physics::addStaticBox(Mesh &mesh)
 
 void Physics::addDynamicBox(Mesh &mesh)
 {
-	printf("extents dynamic: %f, %f, %f\n", mesh.extents.x, mesh.extents.y, mesh.extents.z);
 	//create a dynamic rigidbody
 	// btBoxShape vectors must all be positive
 	btCollisionShape* colShape = new btBoxShape(btVector3(btScalar(mesh.extents.x), btScalar(mesh.extents.y), btScalar(mesh.extents.z)));

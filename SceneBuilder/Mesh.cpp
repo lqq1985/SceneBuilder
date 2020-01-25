@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include <iostream>
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, glm::vec3 extents, std::string name, glm::mat4 mTransform)
 {
@@ -11,6 +12,11 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std:
 
     glm::decompose(mTransform, this->scale, this->rotation, this->position, this->skew, this->perspective);
     this->rotation = glm::conjugate(this->rotation);
+
+    std::cout << this->name << std::endl;
+    printf("position %f, %f, %f\n", this->position.x, this->position.y, this->position.z);
+    printf("rotation %f, %f, %f, %f\n", this->rotation.x, this->rotation.y, this->rotation.z, this->rotation.w);
+    printf("extents %f, %f, %f\n", this->extents.x, this->extents.y, this->extents.z);
 
     this->setup();
 }
