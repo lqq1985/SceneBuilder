@@ -54,6 +54,7 @@ void Physics::simulate(double dt)
 void Physics::addStaticBox(glm::vec3 position, glm::vec3 extents)
 {
 	printf("extents static: %f, %f, %f\n", extents.x, extents.y, extents.z);
+	// btBoxShape vectors must all be positive
 	btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(extents.x), btScalar(extents.y), btScalar(extents.z)));
 	// btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(1.0), btScalar(1.0), btScalar(1.0)));
 
@@ -85,7 +86,7 @@ void Physics::addDynamicBox(glm::vec3 position, glm::vec3 extents)
 {
 	printf("extents dynamic: %f, %f, %f\n", extents.x, extents.y, extents.z);
 	//create a dynamic rigidbody
-
+	// btBoxShape vectors must all be positive
 	btCollisionShape* colShape = new btBoxShape(btVector3(btScalar(extents.x), btScalar(extents.y), btScalar(extents.z)));
 
 	this->collisionShapes.push_back(colShape);
