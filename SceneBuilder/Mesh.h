@@ -32,7 +32,6 @@ class Mesh
 			std::vector<unsigned int> indices,
 			std::vector<Texture> textures,
 			glm::vec3 extents,
-			glm::vec3 origin,
 			std::string name,
 			glm::mat4 mTransform
 		);
@@ -41,7 +40,6 @@ class Mesh
 		std::vector<unsigned int> indices;
 		std::vector<Texture> textures;
 		glm::vec3 extents;
-		glm::vec3 origin;
 		glm::vec3 position;
 		glm::vec3 scale;
 		glm::quat rotation;

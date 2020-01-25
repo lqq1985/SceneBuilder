@@ -105,7 +105,9 @@ void Physics::addDynamicBox(Mesh &mesh)
 	if (isDynamic)
 		colShape->calculateLocalInertia(mass, localInertia);
 
+	
 	startTransform.setOrigin(btVector3(mesh.position.x, mesh.position.y, mesh.position.z));
+	// startTransform.setRotation(btQuaternion(mesh.rotation.x, mesh.rotation.y, mesh.rotation.z, mesh.rotation.w));
 
 	//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
