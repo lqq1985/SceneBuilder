@@ -53,10 +53,10 @@ void Physics::simulate(double dt)
 
 void Physics::addStaticBox(Mesh mesh, glm::vec3 extents)
 {
-	printf("extents static: %f, %f, %f\n", extents.x, extents.y, extents.z);
+	printf("extents static: %f, %f, %f\n", mesh.extents.x, mesh.extents.y, mesh.extents.z);
 	printf("position static: %f, %f, %f\n", mesh.position.x, mesh.position.y, mesh.position.z);
 	// btBoxShape vectors must all be positive
-	btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(extents.x), btScalar(extents.y), btScalar(extents.z)));
+	btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(mesh.extents.x), btScalar(mesh.extents.y), btScalar(mesh.extents.z)));
 	// btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(1.0), btScalar(1.0), btScalar(1.0)));
 
 	this->collisionShapes.push_back(groundShape);
