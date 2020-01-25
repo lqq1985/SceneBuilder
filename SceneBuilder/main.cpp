@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
+#include <glm/glm.hpp>
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
@@ -112,6 +113,8 @@ int main(int argc, char* args[]) {
 		}
 
 		physics.simulate(dt);
+		std::vector<glm::vec3> meshPositions;
+		physics.getUpdatedPositions(meshPositions);
 
 		/*----
 		UPDATE
@@ -153,7 +156,7 @@ int main(int argc, char* args[]) {
 		modelShader.setVec3("viewPos", camera.getCameraPosition());
 
 		light.draw(projection, view, lightShader);
-
+		 
 		Render::mesh(meshManager.getMeshes(), projection, view, modelShader);
 
 		physics.drawDebugData(projection, view);

@@ -49,23 +49,6 @@ Physics::~Physics()
 void Physics::simulate(double dt)
 {
 	dynamicsWorld->stepSimulation(dt);
-
-	//print positions of all objects
-	for (int j = dynamicsWorld->getNumCollisionObjects() - 1; j >= 0; j--)
-	{
-		btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[j];
-		btRigidBody* body = btRigidBody::upcast(obj);
-		btTransform trans;
-		if (body && body->getMotionState())
-		{
-			body->getMotionState()->getWorldTransform(trans);
-		}
-		else
-		{
-			trans = obj->getWorldTransform();
-		}
-		printf("world pos object %d = %f,%f,%f\n", j, float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ()));
-	}
 }
 
 void Physics::addStaticBox(glm::vec3 position, glm::vec3 extents)
@@ -129,6 +112,34 @@ void Physics::addDynamicBox(glm::vec3 position, glm::vec3 extents)
 	btRigidBody* body = new btRigidBody(rbInfo);
 
 	this->dynamicsWorld->addRigidBody(body);
+}
+
+void Physics::getUpdatedPositions(std::vector<glm::vec3>& newPositions)
+{
+	//print positions of all objects
+	for (int j = dynamicsWorld->getNumCollisionObjects() - 1; j >= 0; j--)
+	{
+		btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[j];
+		btRigidBody* body = btRigidBody::upcast(obj);
+		btTransform trans;
+		if (body && body->getMotionState())
+		{
+			body->getMotionState()->getWorldTransform(trans);
+		}
+		else
+		{
+			trans = obj->getWorldTransform();
+		}
+
+		glm::vec3 p = glm::vec3(
+			float(trans.getOrigin().getX()),
+			float(trans.getOrigin().getY()),
+			float(trans.getOrigin().getZ())
+		);
+
+		newPositions.push_back(p);
+		// printf("world pos object %d = %f,%f,%f\n", j, float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ()));
+	}
 }
 
 void Physics::drawDebugData(glm::mat4 projection, glm::mat4 view)

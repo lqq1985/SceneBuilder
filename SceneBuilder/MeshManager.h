@@ -13,7 +13,6 @@ class MeshManager
 		~MeshManager();
 		void loadModel(std::string filename);
 		std::vector<Mesh> getMeshes();
-	private:
 		std::vector<Mesh> meshes;
 };
 
