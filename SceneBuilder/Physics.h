@@ -16,8 +16,8 @@ class Physics
 		Physics();
 		~Physics();
 		void simulate(double dt);
-		void addStaticBox(glm::vec3 position, glm::vec3 extents, Mesh mesh);
-		void addDynamicBox(glm::vec3 position, glm::vec3 extentt);
+		void addStaticBox(Mesh &mesh);
+		void addDynamicBox(Mesh &mesh);
 		void getUpdatedPositions(std::vector<glm::vec3>& newPositions);
 		void drawDebugData(glm::mat4 projection, glm::mat4 view);
 		btAlignedObjectArray<btCollisionShape*> collisionShapes;

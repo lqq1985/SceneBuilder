@@ -46,10 +46,10 @@ void Model::processNode(aiNode* node, const aiScene* scene, aiMatrix4x4 transfor
 Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, aiMatrix4x4 transformation)
 {
     glm::vec3 extents;
-    glm::mat4 transform = this->aiMatrix4x4ToGlm(transformation);
-    glm::vec3 origin = transform[3];
+    glm::mat4 matTransform = this->aiMatrix4x4ToGlm(transformation);
+    glm::vec3 origin = matTransform[3];
 
-    std::vector<Vertex> vertices = this->getVertices(mesh, extents, transform);
+    std::vector<Vertex> vertices = this->getVertices(mesh, extents, matTransform);
     std::vector<unsigned int> indices = this->getIndices(mesh);
     std::vector<Texture> textures = this->getTexures(mesh, scene);
 
@@ -62,7 +62,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, aiMatrix4x4 transfor
         extents,
         origin,
         name,
-        this->aiMatrix4x4ToGlm(transformation)
+        matTransform
     );
 }
 
