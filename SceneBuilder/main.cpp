@@ -68,10 +68,10 @@ int main(int argc, char* args[]) {
 	
 
 		if (meshes[i].name == "GROUND_1" || meshes[i].name == "GROUND_2" || meshes[i].name == "Cube") {
-			physics.addStaticBox(meshes[i].origin, meshes[i].extents, meshes[i]);
+			physics.addStaticBox(meshes[i], meshes[i].extents);
 		}
 		else {
-			physics.addDynamicBox(meshes[i].origin, meshes[i].extents);
+			physics.addDynamicBox(meshes[i], meshes[i].extents);
 		}
 	}
 

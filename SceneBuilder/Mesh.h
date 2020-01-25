@@ -1,9 +1,11 @@
 #ifndef MESH_H
 #define MESH_H
 
+#define GLM_ENABLE_EXPERIMENTAL
 #include <assimp/Importer.hpp>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 #include <vector>
 #include <string>
 #include <string>
@@ -31,7 +33,6 @@ class Mesh
 			std::vector<unsigned int> indices,
 			std::vector<Texture> textures,
 			glm::vec3 extents,
-			glm::vec3 origin,
 			std::string name,
 			glm::mat4 mTransform
 		);
@@ -40,7 +41,11 @@ class Mesh
 		std::vector<unsigned int> indices;
 		std::vector<Texture> textures;
 		glm::vec3 extents;
-		glm::vec3 origin;
+		glm::vec3 position;
+		glm::quat rotation;
+		glm::vec3 scale;
+		glm::vec3 skew;
+		glm::vec4 perspective;
 		glm::mat4 mTransform;
 		std::string name;
 

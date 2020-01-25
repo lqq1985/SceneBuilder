@@ -51,9 +51,10 @@ void Physics::simulate(double dt)
 	dynamicsWorld->stepSimulation(dt);
 }
 
-void Physics::addStaticBox(glm::vec3 position, glm::vec3 extents, Mesh mesh)
+void Physics::addStaticBox(Mesh mesh, glm::vec3 extents)
 {
 	printf("extents static: %f, %f, %f\n", extents.x, extents.y, extents.z);
+	printf("position static: %f, %f, %f\n", mesh.position.x, mesh.position.y, mesh.position.z);
 	// btBoxShape vectors must all be positive
 	btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(extents.x), btScalar(extents.y), btScalar(extents.z)));
 	// btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(1.0), btScalar(1.0), btScalar(1.0)));
@@ -62,8 +63,7 @@ void Physics::addStaticBox(glm::vec3 position, glm::vec3 extents, Mesh mesh)
 
 	btTransform groundTransform;
 	groundTransform.setIdentity();
-	groundTransform.setOrigin(btVector3(position.x, position.y, position.z));
-	groundTransform.setOrigin(btVector3(mesh.mTransform[3][0], mesh.mTransform[3][1], mesh.mTransform[3][2]));
+	groundTransform.setOrigin(btVector3(mesh.position.x, mesh.position.y, mesh.position.z));
 
 
 	btScalar mass(0.);
@@ -84,9 +84,10 @@ void Physics::addStaticBox(glm::vec3 position, glm::vec3 extents, Mesh mesh)
 	this->dynamicsWorld->addRigidBody(body);
 }
 
-void Physics::addDynamicBox(glm::vec3 position, glm::vec3 extents)
+void Physics::addDynamicBox(Mesh mesh, glm::vec3 extents)
 {
 	printf("extents dynamic: %f, %f, %f\n", extents.x, extents.y, extents.z);
+	printf("position dynamic: %f, %f, %f\n", mesh.position.x, mesh.position.y, mesh.position.z);
 	//create a dynamic rigidbody
 	// btBoxShape vectors must all be positive
 	btCollisionShape* colShape = new btBoxShape(btVector3(btScalar(extents.x), btScalar(extents.y), btScalar(extents.z)));
@@ -106,7 +107,7 @@ void Physics::addDynamicBox(glm::vec3 position, glm::vec3 extents)
 	if (isDynamic)
 		colShape->calculateLocalInertia(mass, localInertia);
 
-	startTransform.setOrigin(btVector3(position.x, position.y, position.z));
+	startTransform.setOrigin(btVector3(mesh.position.x, mesh.position.y, mesh.position.z));
 
 	//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
