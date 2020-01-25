@@ -32,7 +32,7 @@ class Mesh
 			std::vector<Texture> textures,
 			glm::vec3 extents,
 			glm::vec3 origin,
-			aiString name,
+			std::string name,
 			glm::mat4 mTransform
 		);
 		~Mesh();
@@ -42,7 +42,7 @@ class Mesh
 		glm::vec3 extents;
 		glm::vec3 origin;
 		glm::mat4 mTransform;
-		aiString name;
+		std::string name;
 
 		unsigned int VAO, VBO, EBO;
 	private:

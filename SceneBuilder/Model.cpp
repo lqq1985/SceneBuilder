@@ -46,11 +46,14 @@ void Model::processNode(aiNode* node, const aiScene* scene, aiMatrix4x4 transfor
 Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, aiMatrix4x4 transformation)
 {
     glm::vec3 extents;
-    glm::vec3 origin;
+    glm::mat4 transform = this->aiMatrix4x4ToGlm(transformation);
+    glm::vec3 origin = transform[3];
 
-    std::vector<Vertex> vertices = this->vertices(mesh, extents, origin);
-    std::vector<unsigned int> indices = this->indices(mesh);
-    std::vector<Texture> textures = this->textures(mesh, scene);
+    std::vector<Vertex> vertices = this->getVertices(mesh, extents, transform);
+    std::vector<unsigned int> indices = this->getIndices(mesh);
+    std::vector<Texture> textures = this->getTexures(mesh, scene);
+
+    std::string name = mesh->mName.C_Str();
 
     return Mesh(
         vertices,
@@ -58,34 +61,28 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene, aiMatrix4x4 transfor
         textures,
         extents,
         origin,
-        mesh->mName,
+        name,
         this->aiMatrix4x4ToGlm(transformation)
     );
 }
 
-std::vector<Vertex> Model::vertices(aiMesh* mesh, glm::vec3& extents, glm::vec3 &origin)
+std::vector<Vertex> Model::getVertices(aiMesh* mesh, glm::vec3& extents, glm::mat4& transform)
 {
     std::vector<Vertex> vertices;
 
     for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
         Vertex vertex;
 
-        glm::vec3 vector3;
-
-        aiVector3D v = mesh->mVertices[i];
-
-        // Vertices
-        vector3.x = v.x;
-        vector3.y = v.y;
-        vector3.z = v.z;
+        // Convert vertices from model space to world space
+        glm::vec3 vector3 = glm::vec3(transform * glm::vec4(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z, 1.0f));
 
         vertex.position = vector3;
 
         // Normals
         if (mesh->mNormals) {
-            vector3.x = mesh->mNormals[i].x;
-            vector3.y = mesh->mNormals[i].y;
-            vector3.z = mesh->mNormals[i].z;
+                
+            // Convert normals from model space to world space
+            vector3 = glm::vec3(transform * glm::vec4(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z, 0.0f));
             vertex.normal = vector3;
         }
 
@@ -121,16 +118,18 @@ std::vector<Vertex> Model::vertices(aiMesh* mesh, glm::vec3& extents, glm::vec3 
         vertices.push_back(vertex);
     }
 
-    glm::vec3 min = glm::vec3(mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z);
-    glm::vec3 max = glm::vec3(mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z);
+    glm::vec3 min = glm::vec3(transform * glm::vec4(mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z, 1.0f));
+    glm::vec3 max = glm::vec3(transform * glm::vec4(mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z, 1.0f));
 
-    extents = (max - min) * 0.5f;
-    origin = glm::vec3((min.x + max.x) / 2.0f, (min.y + max.y) / 2.0f, (min.z + max.z) / 2.0f);
+    extents = abs((max - min) * 0.5f);
+
+
+    //printf("extents: %f, %f, %f\n", extents.x, extents.y, abs(extents.z));
 
     return vertices;
 }
 
-std::vector<unsigned int> Model::indices(aiMesh* mesh)
+std::vector<unsigned int> Model::getIndices(aiMesh* mesh)
 {
     std::vector<unsigned int> indices;
 
@@ -147,29 +146,29 @@ std::vector<unsigned int> Model::indices(aiMesh* mesh)
     return indices;
 }
 
-std::vector<Texture> Model::textures(aiMesh* mesh, const aiScene* scene)
+std::vector<Texture> Model::getTexures(aiMesh* mesh, const aiScene* scene)
 {
     std::vector<Texture> textures;
 
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
     // 1. diffuse maps
-    std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+    std::vector<Texture> diffuseMaps = loadTextureFiles(material, aiTextureType_DIFFUSE, "texture_diffuse");
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
     // 2. specular maps
-    std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+    std::vector<Texture> specularMaps = loadTextureFiles(material, aiTextureType_SPECULAR, "texture_specular");
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     // 3. normal maps
-    std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+    std::vector<Texture> normalMaps = loadTextureFiles(material, aiTextureType_HEIGHT, "texture_normal");
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
     // 4. height maps
-    std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+    std::vector<Texture> heightMaps = loadTextureFiles(material, aiTextureType_AMBIENT, "texture_height");
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
     return textures;
 }
 
-std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
+std::vector<Texture> Model::loadTextureFiles(aiMaterial* mat, aiTextureType type, std::string typeName)
 {
     std::vector<Texture> textures;
     for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)

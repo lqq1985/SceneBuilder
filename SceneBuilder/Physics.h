@@ -12,8 +12,9 @@ class Physics
 	public:
 		Physics();
 		~Physics();
-		void simulate(std::vector<glm::vec3> &objects);
-		void addBoxShape(glm::vec3 position, glm::vec3 extents, bool hasMass);
+		void simulate(double dt);
+		void addStaticBox(glm::vec3 position, glm::vec3 extents);
+		void addDynamicBox(glm::vec3 position, glm::vec3 extentt);
 		void drawDebugData(glm::mat4 projection, glm::mat4 view);
 		btAlignedObjectArray<btCollisionShape*> collisionShapes;
 	private:
