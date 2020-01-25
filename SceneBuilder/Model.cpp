@@ -121,9 +121,10 @@ std::vector<Vertex> Model::getVertices(aiMesh* mesh, glm::vec3& extents, glm::ma
     glm::vec3 min = glm::vec3(transform * glm::vec4(mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z, 1.0f));
     glm::vec3 max = glm::vec3(transform * glm::vec4(mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z, 1.0f));
 
-    extents = (max - min) * 0.5f;
+    extents = abs((max - min) * 0.5f);
 
-    printf("extents: %f, %f, %f\n", extents.x, extents.y, abs(extents.z));
+
+    //printf("extents: %f, %f, %f\n", extents.x, extents.y, abs(extents.z));
 
     return vertices;
 }

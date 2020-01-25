@@ -58,7 +58,7 @@ int main(int argc, char* args[]) {
 	Physics physics = Physics();
 
 	 meshManager.loadModel("assets/collada_test/collada_test.dae");
-	 //meshManager.loadModel("assets/test_level/test_level.dae");
+	 // meshManager.loadModel("assets/test_level/test_level.dae");
 	
 	std::vector<Mesh> meshes = meshManager.getMeshes();
 
@@ -66,7 +66,7 @@ int main(int argc, char* args[]) {
 		std::cout << meshes[i].name << std::endl;
 	
 
-		if (meshes[i].name == "GROUND_1" || meshes[i].name == "GROUND_2") {
+		if (meshes[i].name == "GROUND_1" || meshes[i].name == "GROUND_2" || meshes[i].name == "Cube") {
 			physics.addStaticBox(meshes[i].origin, meshes[i].extents);
 		}
 		else {
@@ -111,7 +111,6 @@ int main(int argc, char* args[]) {
 			accumulator -= dt;
 		}
 
-		//physics.simulate();
 		physics.simulate(dt);
 
 		/*----
