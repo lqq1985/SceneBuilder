@@ -58,8 +58,8 @@ int main(int argc, char* args[]) {
 	MeshManager meshManager = MeshManager();
 	Physics physics = Physics();
 
-	 //meshManager.loadModel("assets/collada_test/collada_test.dae");
-	  meshManager.loadModel("assets/test_level/test_level.dae");
+	 meshManager.loadModel("assets/collada_test/collada_test.dae");
+	  //meshManager.loadModel("assets/test_level/test_level.dae");
 	
 	std::vector<Mesh> meshes = meshManager.getMeshes();
 
@@ -113,8 +113,6 @@ int main(int argc, char* args[]) {
 		}
 
 		physics.simulate(dt);
-		std::vector<glm::vec3> meshPositions;
-		physics.getUpdatedPositions(meshPositions);
 
 		/*----
 		UPDATE
@@ -147,6 +145,7 @@ int main(int argc, char* args[]) {
 		-----------*/
 
 		if (showGrid) grid.render(projection, view, camera.getCameraPosition());
+		physics.drawDebugData(projection, view);
 
 		modelShader.use();
 		modelShader.setFloat("shininess", materialProps.shininess);
@@ -158,8 +157,7 @@ int main(int argc, char* args[]) {
 		light.draw(projection, view, lightShader);
 		 
 		Render::mesh(meshManager.getMeshes(), projection, view, modelShader);
-
-		physics.drawDebugData(projection, view);
+		
 
 		/*-----------
 		GUI RENDER
