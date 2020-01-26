@@ -25,9 +25,9 @@ public:
 	Shader shader = Shader("shaders/debug.vert", "shaders/debug.frag");
 	void SetMatrices(glm::mat4 pViewMatrix, glm::mat4 pProjectionMatrix)
 	{
-		shader.use();
-		shader.setMat4("projection", pProjectionMatrix);
-		shader.setMat4("view", pViewMatrix);
+		this->shader.use();
+		this->shader.setMat4("projection", pProjectionMatrix);
+		this->shader.setMat4("view", pViewMatrix);
 
 		////glUniformMatrix4fv(glGetUniformLocation(lineShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(pProjectionMatrix));
 		////glUniformMatrix4fv(glGetUniformLocation(lineShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(pViewMatrix));

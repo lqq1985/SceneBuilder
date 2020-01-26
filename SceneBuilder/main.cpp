@@ -55,22 +55,22 @@ int main(int argc, char* args[]) {
 	Grid grid = Grid();
 	Shader modelShader = Shader("shaders/basic_lighting_no_texture.vert", "shaders/basic_lighting_no_texture.frag");
 	Shader lightShader = Shader("shaders/light.vert", "shaders/light.frag");
-	MeshManager meshManager = MeshManager();
+	MeshManager* meshManager = new MeshManager();
 	Physics physics = Physics();
 
-	 //meshManager.loadModel("assets/collada_test/collada_test.dae");
+	 meshManager->loadModel("assets/collada_test/collada_test.dae");
 	  //meshManager.loadModel("assets/test_level/test_level.dae");
-	meshManager.loadModel("assets/level_rotation_test/level_rotation_test.dae");
+	//meshManager.loadModel("assets/level_rotation_test/level_rotation_test.dae");
 	
-	std::vector<Mesh> meshes = meshManager.getMeshes();
+	std::vector<Mesh> meshes = meshManager->getMeshes();
 
 	for (int i = 0; i < meshes.size(); i++) {
 
 		if (meshes[i].name == "GROUND_1" || meshes[i].name == "GROUND_2") {
-			physics.addStaticBox(meshes[i]);
+			physics.addStaticBox(meshes[i], i);
 		}
 		else {
-			physics.addDynamicBox(meshes[i]);
+			physics.addDynamicBox(meshes[i], i);
 		}
 	}
 
@@ -112,6 +112,7 @@ int main(int argc, char* args[]) {
 		}
 
 		physics.simulate(dt);
+		physics.getUpdatedPositions(meshManager->getMeshes());
 
 		/*----
 		UPDATE
@@ -155,7 +156,7 @@ int main(int argc, char* args[]) {
 
 		light.draw(projection, view, lightShader);
 		 
-		Render::mesh(meshManager.getMeshes(), projection, view, modelShader);
+		Render::mesh(meshManager->getMeshes(), projection, view, modelShader);
 		
 
 		/*-----------
@@ -176,6 +177,7 @@ int main(int argc, char* args[]) {
 		glViewport(0, 0, (int)SCREEN_WIDTH, (int)SCREEN_HEIGHT);
 	}
 
+	delete meshManager;
 	GUI::shutdown();
 	return SystemOpenGLInit::shutDown(window, context);
 };

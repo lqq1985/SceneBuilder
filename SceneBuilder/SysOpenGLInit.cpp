@@ -15,7 +15,7 @@ int SystemOpenGLInit::defaults(SDL_Window*& window, SDL_GLContext& context, unsi
 
 	if (engineError = SystemOpenGLInit::initSDL() > 0) return engineError;
 	if (engineError = SystemOpenGLInit::setGlAttributes(sMinor, sMajor) > 0) return engineError;
-	// SystemOpenGLInit::initMultisampling(1,4);
+	SystemOpenGLInit::initMultisampling(1,4);
 	if (engineError = SystemOpenGLInit::initWindow(window, screenWidth, screenHeight) > 0) return engineError;
 	if (engineError = SystemOpenGLInit::initContext(context, window) > 0) return engineError;
 	if (engineError = SystemOpenGLInit::initGlew() > 0) return engineError;

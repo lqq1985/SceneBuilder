@@ -7,7 +7,6 @@ void Render::mesh(std::vector<Mesh> meshes, glm::mat4 projection, glm::mat4 view
     shader.setMat4("view", view);
 
     for (unsigned int i = 0; i < meshes.size(); i++) {
-        //shader.setMat4("model", glm::mat4(1));
         shader.setMat4("model", meshes[i].mTransform);
 
         unsigned int diffuseNr = 1;

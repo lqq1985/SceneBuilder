@@ -51,18 +51,20 @@ void Physics::simulate(double dt)
 	dynamicsWorld->stepSimulation(dt);
 }
 
-void Physics::addStaticBox(Mesh &mesh)
+void Physics::addStaticBox(Mesh &mesh, unsigned int id)
 {
 	// btBoxShape vectors must all be positive
 	btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(mesh.extents.x), btScalar(mesh.extents.y), btScalar(mesh.extents.z)));
 	// btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(1.0), btScalar(1.0), btScalar(1.0)));
+	groundShape->setUserIndex(id);
 
 	this->collisionShapes.push_back(groundShape);
 
 	btTransform groundTransform;
 	groundTransform.setIdentity();
+	// groundTransform.setFromOpenGLMatrix(glm::value_ptr(mesh.mTransform));
 	groundTransform.setOrigin(btVector3(mesh.position.x, mesh.position.y, mesh.position.z));
-
+	// groundTransform.setRotation(btQuaternion(mesh.rotation.x, mesh.rotation.y, mesh.rotation.z, mesh.rotation.w));
 
 	btScalar mass(0.);
 
@@ -82,17 +84,19 @@ void Physics::addStaticBox(Mesh &mesh)
 	this->dynamicsWorld->addRigidBody(body);
 }
 
-void Physics::addDynamicBox(Mesh &mesh)
+void Physics::addDynamicBox(Mesh &mesh, unsigned int id)
 {
 	//create a dynamic rigidbody
 	// btBoxShape vectors must all be positive
 	btCollisionShape* colShape = new btBoxShape(btVector3(btScalar(mesh.extents.x), btScalar(mesh.extents.y), btScalar(mesh.extents.z)));
+	colShape->setUserIndex(id);
 
 	this->collisionShapes.push_back(colShape);
 
 	/// Create Dynamic Objects
 	btTransform startTransform;
 	startTransform.setIdentity();
+	//startTransform.setFromOpenGLMatrix(glm::value_ptr(mesh.mTransform));
 
 	btScalar mass(1.f);
 
@@ -100,12 +104,11 @@ void Physics::addDynamicBox(Mesh &mesh)
 	bool isDynamic = (mass != 0.f);
 
 	btVector3 localInertia(0, 0, 0);
-	if (isDynamic)
+	if (isDynamic) 
 		colShape->calculateLocalInertia(mass, localInertia);
 
 	
-	startTransform.setOrigin(btVector3(mesh.position.x, mesh.position.y, mesh.position.z));
-	// startTransform.setRotation(btQuaternion(mesh.rotation.x, mesh.rotation.y, mesh.rotation.z, mesh.rotation.w));
+	 startTransform.setOrigin(btVector3(mesh.position.x, mesh.position.y, mesh.position.z));
 
 	//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
@@ -115,12 +118,13 @@ void Physics::addDynamicBox(Mesh &mesh)
 	this->dynamicsWorld->addRigidBody(body);
 }
 
-void Physics::getUpdatedPositions(std::vector<glm::vec3>& newPositions)
+void Physics::getUpdatedPositions(std::vector<Mesh> meshes)
 {
 	//print positions of all objects
 	for (int j = dynamicsWorld->getNumCollisionObjects() - 1; j >= 0; j--)
 	{
 		btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[j];
+		int id = obj->getUserIndex();
 		btRigidBody* body = btRigidBody::upcast(obj);
 		btTransform trans;
 		if (body && body->getMotionState())
@@ -132,13 +136,6 @@ void Physics::getUpdatedPositions(std::vector<glm::vec3>& newPositions)
 			trans = obj->getWorldTransform();
 		}
 
-		glm::vec3 p = glm::vec3(
-			float(trans.getOrigin().getX()),
-			float(trans.getOrigin().getY()),
-			float(trans.getOrigin().getZ())
-		);
-
-		newPositions.push_back(p);
 		// printf("world pos object %d = %f,%f,%f\n", j, float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ()));
 	}
 }
