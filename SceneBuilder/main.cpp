@@ -58,9 +58,9 @@ int main(int argc, char* args[]) {
 	MeshManager* meshManager = new MeshManager();
 	Physics physics = Physics();
 
-	 meshManager->loadModel("assets/collada_test/collada_test.dae");
+	 //meshManager->loadModel("assets/collada_test/collada_test.dae");
 	  //meshManager.loadModel("assets/test_level/test_level.dae");
-	//meshManager.loadModel("assets/level_rotation_test/level_rotation_test.dae");
+	meshManager->loadModel("assets/level_rotation_test/level_rotation_test.dae");
 	
 	std::vector<Mesh> meshes = meshManager->getMeshes();
 
