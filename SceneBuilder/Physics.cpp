@@ -51,20 +51,30 @@ void Physics::simulate(double dt)
 	dynamicsWorld->stepSimulation(dt);
 }
 
-void Physics::addStaticBox(Mesh &mesh, unsigned int id)
+void Physics::addStaticBox(Mesh &mesh, int id)
 {
-	// btBoxShape vectors must all be positive
-	btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(mesh.extents.x), btScalar(mesh.extents.y), btScalar(mesh.extents.z)));
-	// btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(1.0), btScalar(1.0), btScalar(1.0)));
-	groundShape->setUserIndex(id);
+
+	btTriangleMesh* meshInterface = new btTriangleMesh();
+
+	for (int i = 0; i < mesh.indices.size()/3; i++) {
+		glm::vec3 v1 = glm::vec4(mesh.mTransform * glm::vec4(mesh.vertices[mesh.indices[i * 3]].position, 1.0f));
+		glm::vec3 v2 = glm::vec4(mesh.mTransform * glm::vec4(mesh.vertices[mesh.indices[i * 3 + 1]].position, 1.0f));
+		glm::vec3 v3 = glm::vec4(mesh.mTransform * glm::vec4(mesh.vertices[mesh.indices[i * 3 + 2]].position, 1.0f));
+
+		meshInterface->addTriangle(btVector3(v1.x, v1.y, v1.z),
+			btVector3(v2.x, v2.y, v2.z),
+			btVector3(v3.x, v3.y, v3.z));
+	}
+
+	btBvhTriangleMeshShape* groundShape = new btBvhTriangleMeshShape(meshInterface, true, true);
 
 	this->collisionShapes.push_back(groundShape);
 
+	groundShape->setUserIndex(id);
+	printf("set id: %i\n", id);
+
 	btTransform groundTransform;
 	groundTransform.setIdentity();
-	// groundTransform.setFromOpenGLMatrix(glm::value_ptr(mesh.mTransform));
-	groundTransform.setOrigin(btVector3(mesh.position.x, mesh.position.y, mesh.position.z));
-	// groundTransform.setRotation(btQuaternion(mesh.rotation.x, mesh.rotation.y, mesh.rotation.z, mesh.rotation.w));
 
 	btScalar mass(0.);
 
@@ -84,12 +94,13 @@ void Physics::addStaticBox(Mesh &mesh, unsigned int id)
 	this->dynamicsWorld->addRigidBody(body);
 }
 
-void Physics::addDynamicBox(Mesh &mesh, unsigned int id)
+void Physics::addDynamicBox(Mesh &mesh, int id)
 {
 	//create a dynamic rigidbody
 	// btBoxShape vectors must all be positive
 	btCollisionShape* colShape = new btBoxShape(btVector3(btScalar(mesh.extents.x), btScalar(mesh.extents.y), btScalar(mesh.extents.z)));
 	colShape->setUserIndex(id);
+	printf("set id: %i\n", id);
 
 	this->collisionShapes.push_back(colShape);
 
@@ -118,23 +129,28 @@ void Physics::addDynamicBox(Mesh &mesh, unsigned int id)
 	this->dynamicsWorld->addRigidBody(body);
 }
 
-void Physics::getUpdatedPositions(std::vector<Mesh> meshes)
+void Physics::getUpdatedPositions(std::vector<Mesh> &meshes)
 {
-	//print positions of all objects
 	for (int j = dynamicsWorld->getNumCollisionObjects() - 1; j >= 0; j--)
 	{
+		btScalar matrix[16];
 		btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[j];
-		int id = obj->getUserIndex();
 		btRigidBody* body = btRigidBody::upcast(obj);
 		btTransform trans;
 		if (body && body->getMotionState())
 		{
 			body->getMotionState()->getWorldTransform(trans);
+
+			trans.getOpenGLMatrix(matrix);
+
+			meshes[0].mTransform = UtilConversion::btScalar2mat4(matrix);
+
 		}
 		else
 		{
 			trans = obj->getWorldTransform();
 		}
+		
 
 		// printf("world pos object %d = %f,%f,%f\n", j, float(trans.getOrigin().getX()), float(trans.getOrigin().getY()), float(trans.getOrigin().getZ()));
 	}

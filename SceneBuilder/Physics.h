@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "Mesh.h"
+#include "UtilConvertion.h"
 
 class Physics
 {
@@ -16,9 +17,9 @@ class Physics
 		Physics();
 		~Physics();
 		void simulate(double dt);
-		void addStaticBox(Mesh &mesh, unsigned int id);
-		void addDynamicBox(Mesh &mesh, unsigned int id);
-		void getUpdatedPositions(std::vector<Mesh> meshes);
+		void addStaticBox(Mesh &mesh, int id);
+		void addDynamicBox(Mesh &mesh, int id);
+		void getUpdatedPositions(std::vector<Mesh> &meshes);
 		void drawDebugData(glm::mat4 projection, glm::mat4 view);
 		btAlignedObjectArray<btCollisionShape*> collisionShapes;
 	private:
