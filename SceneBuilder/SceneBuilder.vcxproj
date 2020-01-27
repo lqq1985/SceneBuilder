@@ -144,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="UtilConvertion.h" />
     <ClInclude Include="CameraFreeLook.h" />
     <ClInclude Include="GLDebugDrawer.h" />
     <ClInclude Include="Grid.h" />
@@ -201,6 +202,7 @@
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="SysOpenGLInit.cpp" />
     <ClCompile Include="SysOpenGLSetting.cpp" />
+    <ClCompile Include="UtilConversion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\debug.frag" />

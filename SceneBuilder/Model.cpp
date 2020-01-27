@@ -115,6 +115,9 @@ std::vector<Vertex> Model::getVertices(aiMesh* mesh)
         vertices.push_back(vertex);
     }
 
+    printf("min aabb: %f, %f, %f\n", mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z);
+    printf("max aabb: %f, %f, %f\n", mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z);
+
     return vertices;
 }
 

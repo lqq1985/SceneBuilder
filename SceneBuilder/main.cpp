@@ -58,19 +58,17 @@ int main(int argc, char* args[]) {
 	MeshManager* meshManager = new MeshManager();
 	Physics physics = Physics();
 
-	 //meshManager->loadModel("assets/collada_test/collada_test.dae");
-	  //meshManager.loadModel("assets/test_level/test_level.dae");
-	meshManager->loadModel("assets/level_rotation_test/level_rotation_test.dae");
+	meshManager->loadModel("assets/level1/level1.dae");
 	
 	std::vector<Mesh> meshes = meshManager->getMeshes();
 
 	for (int i = 0; i < meshes.size(); i++) {
 
-		if (meshes[i].name == "GROUND_1" || meshes[i].name == "GROUND_2") {
-			physics.addStaticBox(meshes[i], i);
+		if (meshes[i].name == "DYNAMIC") {
+			physics.addDynamicBox(meshes[i], i);
 		}
 		else {
-			physics.addDynamicBox(meshes[i], i);
+			physics.addStaticBox(meshes[i], i);
 		}
 	}
 
@@ -112,7 +110,7 @@ int main(int argc, char* args[]) {
 		}
 
 		physics.simulate(dt);
-		physics.getUpdatedPositions(meshManager->getMeshes());
+		physics.getUpdatedPositions(meshManager->meshes);
 
 		/*----
 		UPDATE
@@ -145,7 +143,7 @@ int main(int argc, char* args[]) {
 		-----------*/
 
 		if (showGrid) grid.render(projection, view, camera.getCameraPosition());
-		physics.drawDebugData(projection, view);
+		// physics.drawDebugData(projection, view);
 
 		modelShader.use();
 		modelShader.setFloat("shininess", materialProps.shininess);
