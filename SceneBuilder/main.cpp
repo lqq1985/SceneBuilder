@@ -64,11 +64,11 @@ int main(int argc, char* args[]) {
 
 	for (int i = 0; i < meshes.size(); i++) {
 
-		if (meshes[i].name == "DYNAMIC") {
-			physics.addDynamicBox(meshes[i], i);
+		if (meshes[i].name == "GROUND_1" || meshes[i].name == "GROUND_2") {
+			physics.addStaticBox(meshes[i], i);
 		}
 		else {
-			physics.addStaticBox(meshes[i], i);
+			physics.addDynamicBox(meshes[i], i);
 		}
 	}
 
