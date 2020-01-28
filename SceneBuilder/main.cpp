@@ -32,6 +32,7 @@ unsigned int SCREEN_WIDTH = 1280;
 unsigned int SCREEN_HEIGHT = 720;
 bool quit = false;
 bool showGrid = true;
+bool simPhysics = false;
 
 STLight lightProps;
 STLight lightProps2;
@@ -109,7 +110,7 @@ int main(int argc, char* args[]) {
 			accumulator -= dt;
 		}
 
-		physics.simulate(dt);
+		if (simPhysics) physics.simulate(dt);
 		physics.getUpdatedPositions(meshManager->meshes);
 
 		/*----
@@ -134,6 +135,7 @@ int main(int argc, char* args[]) {
 		else {
 			SysOpenGLSetting::mouseCursor(true);
 		}
+		if (input.isP()) simPhysics = true;
 		if (input.isQuit()) quit = true;
 
 		view = camera.getViewMatrix();

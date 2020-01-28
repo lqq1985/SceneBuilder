@@ -137,10 +137,7 @@ void Physics::getUpdatedPositions(std::vector<Mesh> &meshes)
 		btRigidBody* body = btRigidBody::upcast(obj);
 		btTransform trans;
 
-		if (!body->isStaticObject()) {
-			trans.getOpenGLMatrix(matrix);
-			meshes[obj->getUserIndex()].mTransform = UtilConversion::btScalar2mat4(matrix);
-		}
+
 
 		if (body && body->getMotionState())
 		{
@@ -149,6 +146,11 @@ void Physics::getUpdatedPositions(std::vector<Mesh> &meshes)
 		else
 		{
 			trans = obj->getWorldTransform();
+		}
+
+		if (!body->isStaticObject()) {
+			trans.getOpenGLMatrix(matrix);
+			meshes[obj->getUserIndex()].mTransform = UtilConversion::btScalar2mat4(matrix);
 		}
 	}
 }

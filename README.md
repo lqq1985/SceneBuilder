@@ -13,3 +13,6 @@ A scene manager that will provide an interface for the user to add and manipulat
 | GLM       | Math library                                                                 |
 | stb_image | Load image files                                                             |
 | freetype  | Load fonts                                                                   |
+| bullet Physics  | Physics library                                                               |
+
+![Alt Text](2020-01-28 6-41-16 PM.gif)
