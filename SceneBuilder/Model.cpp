@@ -32,7 +32,10 @@ void Model::processNode(aiNode* node, const aiScene* scene, aiMatrix4x4 transfor
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 
         // only apply transformation on meshs not entities such as lights or camera.
-        transformation *= node->mTransformation;
+        // While this is currently setting the transform value to the current node->mTransform.
+        // i would need to change this when a node has more than one child as the transform matrix
+        // would need ot be multiplied.
+        transformation = node->mTransformation;
 
         this->meshes.push_back(processMesh(mesh, scene, transformation));
     }

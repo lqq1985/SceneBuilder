@@ -30,7 +30,7 @@ namespace GUI {
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	};
 
-	void mainPanel(CameraFreeLook &cameraFreeLook, Light& light, STLight &stLight, STMaterial &stMaterial, bool &grid) {
+	void mainPanel(CameraFreeLook &cameraFreeLook, Light& light, STLight &stLight, STMaterial &stMaterial, bool &grid, bool &showDebugDraw) {
 		ImGuiWindowFlags window_flags = 0;
 		window_flags |= ImGuiWindowFlags_NoTitleBar;
 		window_flags |= ImGuiWindowFlags_NoScrollbar;
@@ -75,6 +75,9 @@ namespace GUI {
 
 		ImGui::Separator();
 		ImGui::Checkbox("Show Grid", &grid);
+
+		ImGui::Separator();
+		ImGui::Checkbox("Show Debug Draw", &showDebugDraw);
 
 		ImGui::PopStyleVar();
 		ImGui::End();
