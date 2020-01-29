@@ -33,6 +33,7 @@ unsigned int SCREEN_HEIGHT = 720;
 bool quit = false;
 bool showGrid = true;
 bool simPhysics = false;
+bool showDebugDraw = false;
 
 STLight lightProps;
 STLight lightProps2;
@@ -59,7 +60,7 @@ int main(int argc, char* args[]) {
 	MeshManager* meshManager = new MeshManager();
 	Physics physics = Physics();
 
-	meshManager->loadModel("assets/level1/level1.dae");
+	meshManager->loadModel("assets/level2/level2.dae");
 	
 	std::vector<Mesh> meshes = meshManager->getMeshes();
 
@@ -111,7 +112,7 @@ int main(int argc, char* args[]) {
 		}
 
 		if (simPhysics) physics.simulate(dt);
-		physics.getUpdatedPositions(meshManager->meshes);
+		// physics.getUpdatedPositions(meshManager->meshes);
 
 		/*----
 		UPDATE
@@ -145,7 +146,7 @@ int main(int argc, char* args[]) {
 		-----------*/
 
 		if (showGrid) grid.render(projection, view, camera.getCameraPosition());
-		// physics.drawDebugData(projection, view);
+		if (showDebugDraw) physics.drawDebugData(projection, view);
 
 		modelShader.use();
 		modelShader.setFloat("shininess", materialProps.shininess);
@@ -164,7 +165,7 @@ int main(int argc, char* args[]) {
 		-----------*/
 
 		GUI::begin(window);
-		GUI::mainPanel(camera, light, lightProps, materialProps, showGrid);
+		GUI::mainPanel(camera, light, lightProps, materialProps, showGrid, showDebugDraw);
 		GUI::render();
 		 
 		/*-----------

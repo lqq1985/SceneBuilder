@@ -13,14 +13,11 @@ class Grid
 		~Grid();
 		void render(glm::mat4 projection, glm::mat4 view, glm::vec3 viewPos);
 	private:
-		int lineLength = 20;
-		GLuint YVAO;
-		GLuint XVAO;
-		GLuint ZVAO;
+		int gridSize = 18;
+		int numLines;
+		GLuint VAO;
 		Shader* shader;
-		void setupYAxis();
-		void setupXAxis();
-		void setupZAxis();
+		void setupAxis();
 };
 
 #endif

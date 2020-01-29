@@ -137,8 +137,6 @@ void Physics::getUpdatedPositions(std::vector<Mesh> &meshes)
 		btRigidBody* body = btRigidBody::upcast(obj);
 		btTransform trans;
 
-
-
 		if (body && body->getMotionState())
 		{
 			body->getMotionState()->getWorldTransform(trans);
