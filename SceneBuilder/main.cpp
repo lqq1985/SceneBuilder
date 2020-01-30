@@ -60,7 +60,8 @@ int main(int argc, char* args[]) {
 	MeshManager* meshManager = new MeshManager();
 	Physics physics = Physics();
 
-	meshManager->loadModel("assets/level2/level2.dae");
+	meshManager->loadModel("assets/map1/map1.dae");
+	meshManager->loadModel("assets/map1/player.dae");
 	
 	std::vector<Mesh> meshes = meshManager->getMeshes();
 
@@ -173,7 +174,7 @@ int main(int argc, char* args[]) {
 		-----------*/
 		SDL_GL_SwapWindow(window);
 
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClearColor(0.3f, 0.4f, 0.45f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glViewport(0, 0, (int)SCREEN_WIDTH, (int)SCREEN_HEIGHT);
 	}
