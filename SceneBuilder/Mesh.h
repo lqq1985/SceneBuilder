@@ -47,6 +47,7 @@ class Mesh
 		glm::vec4 perspective;
 		glm::mat4 mTransform;
 		std::string name;
+		int meshType;
 
 		unsigned int VAO, VBO, EBO;
 	private:

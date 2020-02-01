@@ -1,4 +1,4 @@
-#include "UtilConvertion.h"
+#include "UtilConversion.h"
 
 glm::mat4 UtilConversion::btScalar2mat4(btScalar* matrix) {
     return glm::mat4(
