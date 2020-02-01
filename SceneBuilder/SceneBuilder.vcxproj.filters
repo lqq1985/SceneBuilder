@@ -120,7 +120,7 @@
     <ClInclude Include="Render.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UtilConvertion.h">
+    <ClInclude Include="UtilConversion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

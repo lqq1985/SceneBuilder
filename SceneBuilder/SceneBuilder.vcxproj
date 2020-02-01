@@ -144,7 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="UtilConvertion.h" />
+    <ClInclude Include="UtilConversion.h" />
     <ClInclude Include="CameraFreeLook.h" />
     <ClInclude Include="GLDebugDrawer.h" />
     <ClInclude Include="Grid.h" />

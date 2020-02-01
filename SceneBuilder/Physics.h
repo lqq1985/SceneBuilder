@@ -9,7 +9,10 @@
 #include <vector>
 
 #include "Mesh.h"
-#include "UtilConvertion.h"
+#include "UtilConversion.h"
+
+// kinematic objects, character controls
+// https://github.com/bulletphysics/bullet3/blob/master/src/BulletDynamics/Dynamics/btRigidBody.h
 
 class Physics
 {
@@ -19,6 +22,7 @@ class Physics
 		void simulate(double dt);
 		void addStaticBox(Mesh &mesh, int id);
 		void addDynamicBox(Mesh &mesh, int id);
+		void addKinematicShape(Mesh& mesh, int id);
 		void getUpdatedPositions(std::vector<Mesh> &meshes);
 		void drawDebugData(glm::mat4 projection, glm::mat4 view);
 		btAlignedObjectArray<btCollisionShape*> collisionShapes;

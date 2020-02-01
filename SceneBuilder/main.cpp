@@ -60,18 +60,20 @@ int main(int argc, char* args[]) {
 	MeshManager* meshManager = new MeshManager();
 	Physics physics = Physics();
 
-	meshManager->loadModel("assets/map1/map1.dae");
-	meshManager->loadModel("assets/map1/player.dae");
+	meshManager->loadModel("assets/map1/player.dae", 0);
+	meshManager->loadModel("assets/map1/map1.dae", 1);
+	
 	
 	std::vector<Mesh> meshes = meshManager->getMeshes();
 
 	for (int i = 0; i < meshes.size(); i++) {
 
-		if (meshes[i].name == "GROUND_1" || meshes[i].name == "GROUND_2") {
-			physics.addStaticBox(meshes[i], i);
-		}
-		else {
+		if (meshes[i].meshType == 0) {
 			physics.addDynamicBox(meshes[i], i);
+		}
+
+		if (meshes[i].meshType == 1) {
+			physics.addStaticBox(meshes[i], i);
 		}
 	}
 
@@ -113,7 +115,7 @@ int main(int argc, char* args[]) {
 		}
 
 		if (simPhysics) physics.simulate(dt);
-		// physics.getUpdatedPositions(meshManager->meshes);
+		physics.getUpdatedPositions(meshManager->meshes);
 
 		/*----
 		UPDATE
@@ -174,7 +176,7 @@ int main(int argc, char* args[]) {
 		-----------*/
 		SDL_GL_SwapWindow(window);
 
-		glClearColor(0.3f, 0.4f, 0.45f, 1.0f);
+		glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glViewport(0, 0, (int)SCREEN_WIDTH, (int)SCREEN_HEIGHT);
 	}

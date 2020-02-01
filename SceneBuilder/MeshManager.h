@@ -11,7 +11,7 @@ class MeshManager
 	public:
 		MeshManager();
 		~MeshManager();
-		void loadModel(std::string filename);
+		void loadModel(std::string filename, int meshType);
 		std::vector<Mesh> getMeshes();
 		std::vector<Mesh> meshes;
 };

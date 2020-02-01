@@ -128,6 +128,10 @@ void Physics::addDynamicBox(Mesh &mesh, int id)
 	this->dynamicsWorld->addRigidBody(body);
 }
 
+void Physics::addKinematicShape(Mesh& mesh, int id)
+{
+}
+
 void Physics::getUpdatedPositions(std::vector<Mesh> &meshes)
 {
 	for (int j = dynamicsWorld->getNumCollisionObjects() - 1; j >= 0; j--)
@@ -146,10 +150,10 @@ void Physics::getUpdatedPositions(std::vector<Mesh> &meshes)
 			trans = obj->getWorldTransform();
 		}
 
-		if (!body->isStaticObject()) {
-			trans.getOpenGLMatrix(matrix);
-			meshes[obj->getUserIndex()].mTransform = UtilConversion::btScalar2mat4(matrix);
-		}
+		//if (!body->isStaticObject()) {
+		//	trans.getOpenGLMatrix(matrix);
+		//	meshes[obj->getUserIndex()].mTransform = UtilConversion::btScalar2mat4(matrix);
+		//}
 	}
 }
 
